@@ -275,9 +275,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-
     model = ParallelizedBeam(where=args.where, backend='joblib', 
         n_cpus=args.n_cpus)
+    print "The wrapper has been instantiated as 'model'."
 
     if args.MonteCarlo is not None:
         from probability_model import X_distribution
@@ -288,8 +288,7 @@ if __name__ == '__main__':
 
     elif args.X is not None:
         if isinstance(args.X[0], str) and os.path.isfile(args.X[0]):
-            with open(args.X[0], 'rb') as fh:
-                X = pickle.load(fh)
+            X = load_array(args.X[0])
             print "Loaded a DOE of size {} from file: '{}'".format(X.getSize(),
                 args.X[0])
         else:
@@ -297,13 +296,14 @@ if __name__ == '__main__':
 
 
     if args.run:
-        launchdir = os.getcwd()
-        try:
-            Y = model(X)
+        Y = model(X)
+        # Dump the results if asked
+        if args.dump:
+            dump_array(Y, 'OutputSample.pkl')
+            print "The output has been saved to 'OutputSample.pkl'"
+        else:
             print "Finished evaluationg the model. Take a look at 'Y' variable."
-            if args.dump:
-                dump_array(Y, 'OutputSample.pkl')
-                print "The output has been saved to 'OutputSample.pkl'"
-        except Exception as e:
-            os.chdir(launchdir)
-            raise e
+    elif (args.MonteCarlo is not None) or (args.X is not None):
+        print "The desired input is ready to be run using --> 'Y = model(X)'"
+
+

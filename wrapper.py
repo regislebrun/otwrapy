@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-Python wrapper example used for the PRACE training on HPC and uncertainty
+General purpose OpenTURNS python wrapper
 """
 
 import openturns as ot
@@ -24,12 +24,6 @@ class Wrapper(ot.OpenTURNSPythonFunction):
     """
     This function is intended to be lightweight so that it can be easily
     distributed across several nodes in a cluster.
-    
-    Parameters
-    ----------
-    where : string (Optional)
-        Setup configuration according to where you run it
-    
     """
 
     # Possible configurations
@@ -42,7 +36,12 @@ class Wrapper(ot.OpenTURNSPythonFunction):
                  'tgcc': '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'}
 
     def __init__(self, where='phimeca', sleep=0.0):
-        
+        """
+        Parameters
+        ----------
+        where : string (Optional)
+            Setup configuration according to where you run it
+        """
         assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
 
         self.base_dir = Wrapper.base_dirs[where]
@@ -59,7 +58,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
         Parameters
         ----------
-        X : float (something like ot.NumericalPoint or np 1D array)
+        X : float (something like ot.NumericalPoint or a numpy 1D array)
             Input vector of size :math:`n` on which the model will be evaluated
         """
         try:
@@ -102,32 +101,33 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
 class ParallelWrapper(ot.OpenTURNSPythonFunction):
     """
-    This callable class distributes calls to the class Wrapper across
-    a cluster using either joblib or ipython.
-
-    Parameters
-    ----------
-
-    where : string (Optional)
-        Either 'phimeca', 'poincare' or 'tgcc'. The wrapper will be configured
-        according to where you run it.
-
-    backend : string (Optional)
-        Wheter to parallelize using 'joblib' or 'ipython'.
-
-    n_cpus : int (Optional)
-        Number of CPUs on which the simulations will be distributed. Needed Only
-        if using 'joblib' as backend.
-
-    view : IPython load_balanced_view (Optional)
-        If backend is 'ipython', you must pass a view as an argument.
-
-    sleep : float (Optional)
-        Intentional delay (in seconds) to demonstrate the effect of
-        parallelizing.
+    Class that distributes calls to the class Wrapper across a cluster using
+    either joblib or ipython.
     """
     def __init__(self, where='phimeca', backend='joblib',
         n_cpus=10, view=None, sleep=0.0):
+        """
+        Parameters
+        ----------
+
+        where : string (Optional)
+            Either 'phimeca', 'poincare' or 'tgcc'. The wrapper will be configured
+            according to where you run it.
+
+        backend : string (Optional)
+            Wheter to parallelize using 'joblib' or 'ipython'.
+
+        n_cpus : int (Optional)
+            Number of CPUs on which the simulations will be distributed. Needed Only
+            if using 'joblib' as backend.
+
+        view : IPython load_balanced_view (Optional)
+            If backend is 'ipython', you must pass a view as an argument.
+
+        sleep : float (Optional)
+            Intentional delay (in seconds) to demonstrate the effect of
+            parallelizing.
+        """
 
         assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
         self.n_cpus = n_cpus

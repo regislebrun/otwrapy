@@ -70,29 +70,79 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             temp_work_dir = mkdtemp(dir=self.temp_work_dir_base, prefix='ot-beam-example-')
             os.chdir(temp_work_dir)
             
-            # Parse input file
-            ot.coupling_tools.replace(
-                self.input_template,
-                'beam.xml',
-                ['@F','@E','@L','@I'],
-                X)
+            # Create input file
+            self._create_input_file(X)
 
             # Execute code
-            ot.coupling_tools.execute(self.executable)
+            runtime = self._call(X)
 
             # Retrieve output (see also coupling_tools.get_value)
-            xmldoc = minidom.parse('_beam_outputs_.xml')
-            itemlist = xmldoc.getElementsByTagName('outputs')
-            deviation = float(itemlist[0].attributes['deviation'].value)
+            Y = self._parse_output()
 
-            # Make a list out of the output(s)
-            Y = [deviation]
             # Clear temporary working directory
             os.chdir(old_wrk_dir)
             shutil.rmtree(temp_work_dir)
         except Exception as e:
             os.chdir(old_wrk_dir)
             raise e
+        return Y
+
+    def _create_input_file(self, X):
+        """Create the input file required by the code.
+
+        Replace the values of the vector X to their corresponding tokens on the
+        self.input_template and create the input file `beam.xml` on the current
+        working directory.
+
+        Parameters
+        ----------
+        X : float (something like ot.NumericalPoint or a numpy 1D array)
+            Input vector of size :math:`n` on which the model will be evaluated
+        """
+        ot.coupling_tools.replace(
+            self.input_template,
+            'beam.xml',
+            ['@F','@E','@L','@I'],
+            X)
+
+    def _call(self, X):
+        """Execute code on the shell
+        
+        Parameters
+        ----------
+        X : float (something like ot.NumericalPoint or a numpy 1D array)
+            Input vector of size :math:`n` on which the model will be evaluated
+
+        Returns
+        -------
+        runtime : float
+            Total runtime (wall time and not cpu time)
+        """
+
+        time_start = time.time()
+        ot.coupling_tools.execute(self.executable)
+        time_stop = time.time()
+
+        return time_stop - time_start
+
+
+    def _parse_output(self):
+        """Parse the output given by the code
+
+        Returns
+        -------
+        Y : list
+            Output vector of the model. Univariate in this case.
+        """
+
+        # Retrieve output (see also coupling_tools.get_value)
+        xmldoc = minidom.parse('_beam_outputs_.xml')
+        itemlist = xmldoc.getElementsByTagName('outputs')
+        deviation = float(itemlist[0].attributes['deviation'].value)
+
+        # Make a list out of the output(s)
+        Y = [deviation]
+
         return Y
 
 ####################################################################

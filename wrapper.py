@@ -17,7 +17,7 @@ from xml.dom import minidom
 import time
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
-__version__ = "1.0"
+__version__ = "0.1"
 __email__ = "aguirre@phimeca.fr"
 
 class Wrapper(ot.OpenTURNSPythonFunction):

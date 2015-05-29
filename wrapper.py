@@ -76,7 +76,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             # Execute code
             runtime = self._call(X)
 
-            # Retrieve output (see also coupling_tools.get_value)
+            # Retrieve output (see also ot.coupling_tools.get_value)
             Y = self._parse_output()
 
             # Clear temporary working directory

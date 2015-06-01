@@ -28,12 +28,23 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
     # Possible configurations
     places = ['phimeca', 'poincare', 'tgcc']
-    base_dirs = {'phimeca': '/home/aguirre/Calculs/Formation-PRACE/beam',
-                 'poincare': '/gpfshome/mds/staff/vdubourg/beam',
-                 'tgcc': '/ccc/work/cont003/xxx/aguirref/Formation-PRACE/beam'}
-    temp_dirs = {'phimeca': '/tmp',
-                 'poincare': '/tmp',
-                 'tgcc': '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'}
+    configs = {
+               'phimeca':
+                  {
+                   'base_dir': '/home/aguirre/Calculs/Formation-PRACE/beam',
+                   'temp_work_dir_base': '/tmp'
+                  },
+               'poincare':
+                  {
+                   'base_dir': '/gpfshome/mds/staff/vdubourg/beam',
+                   'temp_work_dir_base': '/tmp'
+                  },
+               'tgcc':
+                  {
+                   'base_dir': '/ccc/work/cont003/xxx/aguirref/Formation-PRACE/beam',
+                   'temp_work_dir_base': '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
+                  }
+              }
 
     def __init__(self, where='phimeca', sleep=0.0):
         """
@@ -43,11 +54,11 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             Setup configuration according to where you run it
         """
         assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
+        self._where = where
+        self.__dict__.update(Wrapper.configs[self._where])
 
-        self.base_dir = Wrapper.base_dirs[where]
-        self.temp_work_dir_base = Wrapper.temp_dirs[where]
         self.input_template = os.path.join(self.base_dir, 'beam_input_template.xml')
-        self.executable = os.path.join(self.base_dir, 'beam -v -x beam.xml')
+        self.executable = os.path.join(self.base_dir, 'beam -x beam.xml')
         self.sleep = sleep
 
         # Number of input/output values:

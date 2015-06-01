@@ -22,7 +22,7 @@ __email__ = "aguirre@phimeca.fr"
 
 class Wrapper(ot.OpenTURNSPythonFunction):
     """
-    This function is intended to be lightweight so that it can be easily
+    This Wrapper is intended to be lightweight so that it can be easily
     distributed across several nodes in a cluster.
     """
 
@@ -32,17 +32,17 @@ class Wrapper(ot.OpenTURNSPythonFunction):
                'phimeca':
                   {
                    'base_dir': '/home/aguirre/Calculs/Formation-PRACE/beam',
-                   'temp_work_dir_base': '/tmp'
+                   'temp_work_dir': '/tmp'
                   },
                'poincare':
                   {
                    'base_dir': '/gpfshome/mds/staff/vdubourg/beam',
-                   'temp_work_dir_base': '/tmp'
+                   'temp_work_dir': '/tmp'
                   },
                'tgcc':
                   {
                    'base_dir': '/ccc/work/cont003/xxx/aguirref/Formation-PRACE/beam',
-                   'temp_work_dir_base': '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
+                   'temp_work_dir': '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
                   }
               }
 
@@ -50,12 +50,22 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         """
         Parameters
         ----------
-        where : string (Optional)
-            Setup configuration according to where you run it
+        where : string or dict (Optional)
+            Setup configuration according to where you run it. If it is a string,
+            configurations are loaded from Wrapper.configs[where]. If it is a
+            dict, it must have 'base_dir' and 'temp_work_dir' as keys
+            pointing, respectively, to where the executable binary is found and
+            to the base path where runs will be executed (e.g., /tmp or /scratch)
         """
-        assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
-        self._where = where
-        self.__dict__.update(Wrapper.configs[self._where])
+        # Look for setup configuration on 'Wrapper.configs[where]'.
+        if isinstance(where, str):
+            assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
+            self.__dict__.update(Wrapper.configs[where])
+        # Take setup configuration from 'where' dict.
+        elif isinstance(where, dict):
+            assert ('base_dir' in where.keys()) \
+               and ('temp_work_dir' in where.keys()), "Wrong configuration dict"
+            self.__dict__.update(where)
 
         self.input_template = os.path.join(self.base_dir, 'beam_input_template.xml')
         self.executable = os.path.join(self.base_dir, 'beam -x beam.xml')
@@ -78,7 +88,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
             # File management (move to temporary working directory)
             old_wrk_dir = os.getcwd()
-            temp_work_dir = mkdtemp(dir=self.temp_work_dir_base, prefix='ot-beam-example-')
+            temp_work_dir = mkdtemp(dir=self.temp_work_dir, prefix='ot-beam-example-')
             os.chdir(temp_work_dir)
             
             # Create input file
@@ -172,8 +182,11 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         ----------
 
         where : string (Optional)
-            Either 'phimeca', 'poincare' or 'tgcc'. The wrapper will be configured
-            according to where you run it.
+            Setup configuration according to where you run it. If it is a string,
+            configurations are loaded from Wrapper.configs[where]. If it is a
+            dict, it must have 'base_dir' and 'temp_work_dir' as keys
+            pointing, respectively, to where the executable binary is found and
+            to the base path where runs will be executed (e.g., /tmp or /scratch)
 
         backend : string (Optional)
             Wheter to parallelize using 'joblib' or 'ipython'.
@@ -190,7 +203,6 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
             parallelizing.
         """
 
-        assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
         self.n_cpus = n_cpus
         self.wrapper = Wrapper(where=where, sleep=sleep)
 

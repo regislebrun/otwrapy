@@ -50,8 +50,8 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         self.executable = os.path.join(self.base_dir, 'beam -v -x beam.xml')
         self.sleep = sleep
 
-        # Number of output values:
-        ot.OpenTURNSPythonFunction.__init__(self, 4, 1)
+        # Number of input/output values:
+        super(Wrapper, self).__init__(4, 1)
 
     def _exec(self, X):
         """Run the model in the shell.

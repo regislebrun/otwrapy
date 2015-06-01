@@ -202,6 +202,11 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         ----------
         X : 1D array
             Input vector of size :math:`m` on which the model will be evaluated
+        
+        Returns
+        -------
+        Y : NumericalPoint
+            Output vector of the model. Univariate in this case.
         """
         return self.wrapper(X)
 
@@ -212,6 +217,11 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         ----------
         X : 2D array
             Input sample of size :math:`n x m` on which the model will be evaluated
+        
+        Returns
+        -------
+        Y : NumericalSample
+            Output Sample of the model.
         """
         from sklearn.externals.joblib import Parallel, delayed
         Y = Parallel(n_jobs=self.n_cpus, verbose=10)(delayed(self.wrapper)(x) for x in X)

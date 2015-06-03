@@ -173,7 +173,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 class ParallelWrapper(ot.OpenTURNSPythonFunction):
     """
     Class that distributes calls to the class Wrapper across a cluster using
-    either joblib or ipython.
+    either 'ipython', 'joblib' or 'multiprocessing'.
     """
     def __init__(self, where='phimeca', backend='joblib',
         n_cpus=10, view=None, sleep=0.0):
@@ -189,11 +189,11 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
             to the base path where runs will be executed (e.g., /tmp or /scratch)
 
         backend : string (Optional)
-            Wheter to parallelize using 'joblib' or 'ipython'.
+            Whether to parallelize using 'ipython', 'joblib' or 'multiprocessing'.
 
         n_cpus : int (Optional)
             Number of CPUs on which the simulations will be distributed. Needed Only
-            if using 'joblib' as backend.
+            if using 'joblib' or 'multiprocessing' as backend.
 
         view : IPython load_balanced_view (Optional)
             If backend is 'ipython', you must pass a view as an argument.
@@ -212,6 +212,8 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
                 view.map_sync(self.wrapper, X), n=4, p=1)
         elif backend == 'joblib':
             self._exec_sample = self._exec_sample_joblib
+        elif backend == 'multiprocessing':
+            self._exec_sample = self._exec_sample_multiprocessing
 
         ot.OpenTURNSPythonFunction.__init__(self, 4, 1)
         self.setInputDescription(['Load', 'Young modulus', 'Length', 'Inertia'])
@@ -234,7 +236,7 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         return self.wrapper(X)
 
     def _exec_sample_joblib(self, X):
-        """Run the model using parallel computing.
+        """Run the model in parallel using joblib.
 
         Parameters
         ----------
@@ -250,6 +252,29 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         Y = Parallel(n_jobs=self.n_cpus, verbose=10)(delayed(self.wrapper)(x) for x in X)
         return ot.NumericalSample(Y)
 
+    def _exec_sample_multiprocessing(self, X):
+        """Run the model in parallel using the multiprocessing module.
+
+        Parameters
+        ----------
+        X : 2D array
+            Input sample of size :math:`n x m` on which the model will be evaluated
+        
+        Returns
+        -------
+        Y : NumericalSample
+            Output Sample of the model.
+        """
+
+        from multiprocessing import Pool
+        p = Pool(processes=self.n_cpus)
+        rs = p.map_async(self.wrapper, X)
+        p.close()
+        while not rs.ready():
+            time.sleep(0.1)
+            
+        Y = np.vstack(rs.get())
+        return ot.NumericalSample(Y)
 
 
 def ParallelizedBeam(*args, **kwargs):
@@ -303,6 +328,10 @@ if __name__ == '__main__':
     parser.add_argument('-n_cpus', default=-1, type=int,
         help="(Optional) number of cpus to use.")
 
+    parser.add_argument('-backend', default='joblib', type=str,
+        choices=['joblib', 'multiprocessing'],
+        help="Whether to parallelize using 'joblib' or 'multiprocessing'.")
+
     parser.add_argument('-run', default=False, type=bool, nargs='?', const='True',
         help='If True, run the model', choices=[True, False])
 
@@ -311,7 +340,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    model = ParallelizedBeam(where=args.where, backend='joblib', 
+    model = ParallelizedBeam(where=args.where, backend=args.backend, 
         n_cpus=args.n_cpus)
     print "The wrapper has been instantiated as 'model'."
 

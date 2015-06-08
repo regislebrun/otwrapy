@@ -15,6 +15,8 @@ import numpy as np
 import shutil
 from xml.dom import minidom
 import time
+from functools import wraps
+
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
 __version__ = "0.1.1"
@@ -63,6 +65,7 @@ class NumericalMathFunctionDecorator:
         self.doc = doc
 
     def __call__(self, wrapper):
+        @wraps(wrapper)
         def numericalmathfunction(*args, **kwargs):
             func = ot.NumericalMathFunction(wrapper(*args, **kwargs))
             # Enable cache

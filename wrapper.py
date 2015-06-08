@@ -298,7 +298,26 @@ def load_array(filename, compressed=False):
 
 
 class TempWorkDir:
-    def __init__(self, base_temp_work_dir, prefix, cleanup=False):
+    """Implement a context manager that creates a temporary working directory.
+    Create a temporary working directory on `base_temp_work_dir` preceeded by 
+    `prefix` and clean up at the exit if neccesary.
+    See: http://sametmax.com/les-context-managers-et-le-mot-cle-with-en-python/
+    """
+    def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False):
+        """
+        Parameters
+        ----------
+        base_temp_work_dir : str (optional)
+            Root path where the temporary working directory will be created.
+            Default = '/tmp'
+
+        prefix : str (optional)
+            String that preceeds the directory name. Default = 'run-'
+
+        cleanup : bool (optional)
+            If True remove the directory and its children at the exit. 
+            Default = False
+        """
         self.dirname = mkdtemp(dir=base_temp_work_dir, prefix='ot-beam-example-')
         self.cleanup = cleanup
     def __enter__(self):

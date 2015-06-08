@@ -305,6 +305,18 @@ def load_array(filename, compressed=False):
             return pickle.load(fh)
 
 
+class TempWorkDir:
+    def __init__(self, base_temp_work_dir, prefix, cleanup=False):
+        self.dirname = mkdtemp(dir=base_temp_work_dir, prefix='ot-beam-example-')
+        self.cleanup = cleanup
+    def __enter__(self):
+        self.curdir = os.getcwd()
+        os.chdir(self.dirname)
+    def __exit__(self, type, value, traceback):
+        os.chdir(self.curdir)
+        if self.cleanup:
+            shutil.rmtree(self.dirname)
+
 if __name__ == '__main__':
 
     import argparse

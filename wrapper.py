@@ -285,17 +285,6 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         return ot.NumericalSample(Y)
 
 
-def ParallelizedBeam(*args, **kwargs):
-    func = ot.NumericalMathFunction(ParallelWrapper(*args, **kwargs))
-    func.enableCache()
-    # Inherit __doc__ from ParallelWrapper.
-    #func.__doc__ = ParallelWrapper.__doc__ + ParallelWrapper.__init__.__doc__
-    # Add the kwargs as attributes of the function for reference purposes.
-    func.__dict__.update(kwargs)
-   
-    return func
-
-
 def dump_array(array, filename, compress=False):
     if compress or (filename.split('.')[-1] == 'pklz'):
         with gzip.open(filename, 'wb') as fh:

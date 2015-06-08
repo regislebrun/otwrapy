@@ -15,10 +15,79 @@ import numpy as np
 import shutil
 from xml.dom import minidom
 import time
+from functools import wraps
+
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
 __version__ = "0.1.1"
 __email__ = "aguirre@phimeca.fr"
+
+
+def NumericalMathFunction(wrapper):
+    #http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
+    #http://www.artima.com/weblogs/viewpost.jsp?thread=240808
+    def inner(*args, **kwargs):
+        func = ot.NumericalMathFunction(wrapper(*args, **kwargs))
+        func.enableCache()
+        # Inherit __doc__ from ParallelWrapper.
+        func.__doc__ = wrapper.__doc__ + wrapper.__init__.__doc__
+        # Add the kwargs as attributes of the function for reference purposes.
+        func.__dict__.update(kwargs)
+        return func
+   
+    return inner
+
+class NumericalMathFunctionDecorator:
+    """Convert an OpenTURNSPythonFunction into a NumericalMathFunction
+    
+    This class is intended to be used as a decorator.
+
+    Notes
+    -----
+    I wanted this decorator to work also with Wrapper class, but it only works 
+    with ParallelWrapper for the moment. Tje problem is that, apparently,
+    decorated classes are not pickable, and Wrapper instances must be pickable
+    so that they can be easily distributed with `multiprocessing`
+
+    References
+    ----------
+    http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
+    http://www.artima.com/weblogs/viewpost.jsp?thread=240808
+    http://stackoverflow.com/questions/30714485/why-does-a-decorated-class-looses-its-docstrings
+    http://stackoverflow.com/questions/30711730/decorated-class-looses-acces-to-its-attributes
+    """
+
+    def __init__(self, enableCache=True, doc=None):
+        """
+        Parameters
+        ----------
+        enableCache : bool (Optional)
+            If True, enable cache of the returned ot.NumericalMathFunction
+        """
+        self.enableCache = enableCache
+        self.doc = doc
+
+    def __call__(self, wrapper):
+        @wraps(wrapper)
+        def numericalmathfunction(*args, **kwargs):
+            func = ot.NumericalMathFunction(wrapper(*args, **kwargs))
+            # Enable cache
+            if self.enableCache:
+                func.enableCache()
+
+            # Update __doc__ of the function
+            if self.doc is None:
+                # Inherit __doc__ from ParallelWrapper.
+                func.__doc__ = wrapper.__doc__ + wrapper.__init__.__doc__
+            else:
+                func.__doc__ = self.doc
+
+            # Add the kwargs as attributes of the function for reference purposes.
+            func.__dict__.update(kwargs)
+            return func
+        # Keep the wrapper class as reference
+        numericalmathfunction.__wrapper__ = wrapper
+        return numericalmathfunction
 
 class Wrapper(ot.OpenTURNSPythonFunction):
     """
@@ -162,6 +231,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 # ------------------------ Parallel Wrapper ------------------------
 ####################################################################
 
+@NumericalMathFunctionDecorator(enableCache=True)
 class ParallelWrapper(ot.OpenTURNSPythonFunction):
     """
     Class that distributes calls to the class Wrapper across a cluster using
@@ -269,17 +339,6 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         return ot.NumericalSample(Y)
 
 
-def ParallelizedBeam(*args, **kwargs):
-    func = ot.NumericalMathFunction(ParallelWrapper(*args, **kwargs))
-    func.enableCache()
-    # Inherit __doc__ from ParallelWrapper.
-    func.__doc__ = ParallelWrapper.__doc__ + ParallelWrapper.__init__.__doc__
-    # Add the kwargs as attributes of the function for reference purposes.
-    func.__dict__.update(kwargs)
-   
-    return func
-
-
 def dump_array(array, filename, compress=False):
     if compress or (filename.split('.')[-1] == 'pklz'):
         with gzip.open(filename, 'wb') as fh:
@@ -363,7 +422,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    model = ParallelizedBeam(where=args.where, backend=args.backend, 
+    model = ParallelWrapper(where=args.where, backend=args.backend, 
         n_cpus=args.n_cpus)
     print "The wrapper has been instantiated as 'model'."
 

@@ -82,15 +82,13 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         X : float (something like ot.NumericalPoint or a numpy 1D array)
             Input vector of size :math:`n` on which the model will be evaluated
         """
-        try:
-            # Create intentional delay
-            time.sleep(self.sleep)
 
-            # File management (move to temporary working directory)
-            old_wrk_dir = os.getcwd()
-            temp_work_dir = mkdtemp(dir=self.temp_work_dir, prefix='ot-beam-example-')
-            os.chdir(temp_work_dir)
-            
+        # Create intentional delay
+        time.sleep(self.sleep)
+
+        # File management. Move to temp work dir. Cleanup at the end
+        with TempWorkDir(self.temp_work_dir, 'ot-beam-example-', True):
+        
             # Create input file
             self._create_input_file(X)
 
@@ -100,12 +98,6 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             # Retrieve output (see also ot.coupling_tools.get_value)
             Y = self._parse_output()
 
-            # Clear temporary working directory
-            os.chdir(old_wrk_dir)
-            shutil.rmtree(temp_work_dir)
-        except Exception as e:
-            os.chdir(old_wrk_dir)
-            raise e
         return Y
 
     def _create_input_file(self, X):

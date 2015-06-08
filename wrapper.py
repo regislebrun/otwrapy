@@ -82,15 +82,13 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         X : float (something like ot.NumericalPoint or a numpy 1D array)
             Input vector of size :math:`n` on which the model will be evaluated
         """
-        try:
-            # Create intentional delay
-            time.sleep(self.sleep)
 
-            # File management (move to temporary working directory)
-            old_wrk_dir = os.getcwd()
-            temp_work_dir = mkdtemp(dir=self.temp_work_dir, prefix='ot-beam-example-')
-            os.chdir(temp_work_dir)
-            
+        # Create intentional delay
+        time.sleep(self.sleep)
+
+        # File management. Move to temp work dir. Cleanup at the end
+        with TempWorkDir(self.temp_work_dir, 'ot-beam-example-', True):
+        
             # Create input file
             self._create_input_file(X)
 
@@ -100,12 +98,6 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             # Retrieve output (see also ot.coupling_tools.get_value)
             Y = self._parse_output()
 
-            # Clear temporary working directory
-            os.chdir(old_wrk_dir)
-            shutil.rmtree(temp_work_dir)
-        except Exception as e:
-            os.chdir(old_wrk_dir)
-            raise e
         return Y
 
     def _create_input_file(self, X):
@@ -304,6 +296,37 @@ def load_array(filename, compressed=False):
         with open(filename, 'rb') as fh:
             return pickle.load(fh)
 
+
+class TempWorkDir:
+    """Implement a context manager that creates a temporary working directory.
+    Create a temporary working directory on `base_temp_work_dir` preceeded by 
+    `prefix` and clean up at the exit if neccesary.
+    See: http://sametmax.com/les-context-managers-et-le-mot-cle-with-en-python/
+    """
+    def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False):
+        """
+        Parameters
+        ----------
+        base_temp_work_dir : str (optional)
+            Root path where the temporary working directory will be created.
+            Default = '/tmp'
+
+        prefix : str (optional)
+            String that preceeds the directory name. Default = 'run-'
+
+        cleanup : bool (optional)
+            If True remove the directory and its children at the exit. 
+            Default = False
+        """
+        self.dirname = mkdtemp(dir=base_temp_work_dir, prefix='ot-beam-example-')
+        self.cleanup = cleanup
+    def __enter__(self):
+        self.curdir = os.getcwd()
+        os.chdir(self.dirname)
+    def __exit__(self, type, value, traceback):
+        os.chdir(self.curdir)
+        if self.cleanup:
+            shutil.rmtree(self.dirname)
 
 if __name__ == '__main__':
 

@@ -20,6 +20,21 @@ __copyright__ = "Copyright 2015, Phimeca Engineering"
 __version__ = "0.1.1"
 __email__ = "aguirre@phimeca.fr"
 
+
+def NumericalMathFunction(wrapper):
+    #http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
+    #http://www.artima.com/weblogs/viewpost.jsp?thread=240808
+    def inner(*args, **kwargs):
+        func = ot.NumericalMathFunction(wrapper(*args, **kwargs))
+        func.enableCache()
+        # Inherit __doc__ from ParallelWrapper.
+        func.__doc__ = wrapper.__doc__ + wrapper.__init__.__doc__
+        # Add the kwargs as attributes of the function for reference purposes.
+        func.__dict__.update(kwargs)
+        return func
+   
+    return inner
+
 class Wrapper(ot.OpenTURNSPythonFunction):
     """
     This Wrapper is intended to be lightweight so that it can be easily
@@ -162,6 +177,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 # ------------------------ Parallel Wrapper ------------------------
 ####################################################################
 
+@NumericalMathFunction
 class ParallelWrapper(ot.OpenTURNSPythonFunction):
     """
     Class that distributes calls to the class Wrapper across a cluster using
@@ -273,7 +289,7 @@ def ParallelizedBeam(*args, **kwargs):
     func = ot.NumericalMathFunction(ParallelWrapper(*args, **kwargs))
     func.enableCache()
     # Inherit __doc__ from ParallelWrapper.
-    func.__doc__ = ParallelWrapper.__doc__ + ParallelWrapper.__init__.__doc__
+    #func.__doc__ = ParallelWrapper.__doc__ + ParallelWrapper.__init__.__doc__
     # Add the kwargs as attributes of the function for reference purposes.
     func.__dict__.update(kwargs)
    

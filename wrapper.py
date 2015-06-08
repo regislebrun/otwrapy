@@ -35,6 +35,54 @@ def NumericalMathFunction(wrapper):
    
     return inner
 
+class NumericalMathFunctionDecorator:
+    """Convert an OpenTURNSPythonFunction into a NumericalMathFunction
+    
+    This class is intended to be used as a decorator.
+
+    See this guides
+    http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
+    http://www.artima.com/weblogs/viewpost.jsp?thread=240808
+
+    Notes
+    -----
+    I wanted this decorator to work also with Wrapper class, but it only works 
+    with ParallelWrapper for the moment. Tje problem is that, apparently,
+    decorated classes are not pickable, and Wrapper instances must be pickable
+    so that they can be easily distributed with `multiprocessing`
+    """
+
+    def __init__(self, enableCache=True, doc=None):
+        """
+        Parameters
+        ----------
+        enableCache : bool (Optional)
+            If True, enable cache of the returned ot.NumericalMathFunction
+        """
+        self.enableCache = enableCache
+        self.doc = doc
+
+    def __call__(self, wrapper):
+        def numericalmathfunction(*args, **kwargs):
+            func = ot.NumericalMathFunction(wrapper(*args, **kwargs))
+            # Enable cache
+            if self.enableCache:
+                func.enableCache()
+
+            # Update __doc__ of the function
+            if self.doc is None:
+                # Inherit __doc__ from ParallelWrapper.
+                func.__doc__ = wrapper.__doc__ + wrapper.__init__.__doc__
+            else:
+                func.__doc__ = self.doc
+
+            # Add the kwargs as attributes of the function for reference purposes.
+            func.__dict__.update(kwargs)
+            return func
+        # Keep the wrapper class as reference
+        numericalmathfunction.__wrapper__ = wrapper
+        return numericalmathfunction
+
 class Wrapper(ot.OpenTURNSPythonFunction):
     """
     This Wrapper is intended to be lightweight so that it can be easily
@@ -177,7 +225,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 # ------------------------ Parallel Wrapper ------------------------
 ####################################################################
 
-@NumericalMathFunction
+@NumericalMathFunctionDecorator(enableCache=True)
 class ParallelWrapper(ot.OpenTURNSPythonFunction):
     """
     Class that distributes calls to the class Wrapper across a cluster using
@@ -368,7 +416,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    model = ParallelizedBeam(where=args.where, backend=args.backend, 
+    model = ParallelWrapper(where=args.where, backend=args.backend, 
         n_cpus=args.n_cpus)
     print "The wrapper has been instantiated as 'model'."
 

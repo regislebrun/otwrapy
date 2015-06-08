@@ -42,16 +42,19 @@ class NumericalMathFunctionDecorator:
     
     This class is intended to be used as a decorator.
 
-    See this guides
-    http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
-    http://www.artima.com/weblogs/viewpost.jsp?thread=240808
-
     Notes
     -----
     I wanted this decorator to work also with Wrapper class, but it only works 
     with ParallelWrapper for the moment. Tje problem is that, apparently,
     decorated classes are not pickable, and Wrapper instances must be pickable
     so that they can be easily distributed with `multiprocessing`
+
+    References
+    ----------
+    http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
+    http://www.artima.com/weblogs/viewpost.jsp?thread=240808
+    http://stackoverflow.com/questions/30714485/why-does-a-decorated-class-looses-its-docstrings
+    http://stackoverflow.com/questions/30711730/decorated-class-looses-acces-to-its-attributes
     """
 
     def __init__(self, enableCache=True, doc=None):

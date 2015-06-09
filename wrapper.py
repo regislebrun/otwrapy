@@ -267,7 +267,10 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
 
         self.n_cpus = n_cpus
         self.wrapper = Wrapper(where=where, sleep=sleep)
+        # This configures how to run single point simulations on the model :
+        self._exec = self.wrapper
 
+        # This configures how to run samples on the model :
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper
         elif backend == 'ipython':
@@ -282,22 +285,6 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         ot.OpenTURNSPythonFunction.__init__(self, 4, 1)
         self.setInputDescription(['Load', 'Young modulus', 'Length', 'Inertia'])
         self.setOutputDescription(['deviation'])
-        
-
-    def _exec(self, X):
-        """Single call of the model
-        
-        Parameters
-        ----------
-        X : 1D array
-            Input vector of size :math:`m` on which the model will be evaluated
-        
-        Returns
-        -------
-        Y : NumericalPoint
-            Output vector of the model. Univariate in this case.
-        """
-        return self.wrapper(X)
 
     def _exec_sample_joblib(self, X):
         """Run the model in parallel using joblib.

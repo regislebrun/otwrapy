@@ -268,7 +268,9 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         self.n_cpus = n_cpus
         self.wrapper = Wrapper(where=where, sleep=sleep)
 
-        if backend == 'ipython':
+        if self.n_cpus == 1:
+            self._exec_sample = self.wrapper
+        elif backend == 'ipython':
             assert view is not None, "You have to provide a View to comunicate with IPython engines"
             self._exec_sample = ot.PythonFunction(func_sample=lambda X:
                 view.map_sync(self.wrapper, X), n=4, p=1)

@@ -366,7 +366,7 @@ class TempWorkDir(object):
             If True remove the directory and its children at the exit. 
             Default = False
         """
-        self.dirname = mkdtemp(dir=base_temp_work_dir, prefix='ot-beam-example-')
+        self.dirname = mkdtemp(dir=base_temp_work_dir, prefix=prefix)
         self.cleanup = cleanup
     def __enter__(self):
         self.curdir = os.getcwd()

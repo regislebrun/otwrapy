@@ -37,7 +37,7 @@ def NumericalMathFunction(wrapper):
    
     return inner
 
-class NumericalMathFunctionDecorator:
+class NumericalMathFunctionDecorator(object):
     """Convert an OpenTURNSPythonFunction into a NumericalMathFunction
     
     This class is intended to be used as a decorator.
@@ -356,7 +356,7 @@ def load_array(filename, compressed=False):
             return pickle.load(fh)
 
 
-class TempWorkDir:
+class TempWorkDir(object):
     """Implement a context manager that creates a temporary working directory.
     Create a temporary working directory on `base_temp_work_dir` preceeded by 
     `prefix` and clean up at the exit if neccesary.

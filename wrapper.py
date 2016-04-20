@@ -34,8 +34,13 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         """
         Parameters
         ----------
-        where : string or dict (Optional)
-            Setup configuration according to where you run it.
+        where : string
+            Where the wrapper will be physically run. The temporary working
+            directory depends on this.
+
+        sleep : float (Optional)
+            Intentional delay (in seconds) to demonstrate the effect of
+            parallelizing.
         """
 
         assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
@@ -48,8 +53,10 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         if where == 'tgcc':
             self.temp_work_dir = '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
 
-        self.input_template = os.path.join(self.base_dir, 'beam_input_template.xml')
-        self.executable = os.path.join(self.base_dir, 'beam -x beam.xml')
+        self.input_template = os.path.join(self.base_dir,
+            'beam_input_template.xml')
+        self.executable = os.path.join(self.base_dir,
+            'beam -x beam.xml')
         self.sleep = sleep
 
         # Number of input/output values:
@@ -71,7 +78,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
         # File management. Move to temp work dir. Cleanup at the end
         with otw.TempWorkDir(self.temp_work_dir, 'ot-beam-example-', True):
-        
+
             # Create input file
             self._create_input_file(X)
 
@@ -103,7 +110,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
     def _call(self, X):
         """Execute code on the shell
-        
+
         Parameters
         ----------
         X : float (something like ot.NumericalPoint or a numpy 1D array)
@@ -203,19 +210,20 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description="Python wrapper example used for the PRACE training on HPC and uncertainty.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    
-    parser.add_argument('-where', default='poincare', type=str, choices=['phimeca', 'poincare', 'tgcc'],
+
+    parser.add_argument('-where', default='poincare', type=str,
+        choices=['phimeca', 'poincare', 'tgcc'],
         help='Place where simulations will run.')
-    
+
     parser.add_argument('-seed', default=int(0), type=int,
         help='Seed number for the random number generator')
-        
+
     parser.add_argument('-MonteCarlo', nargs=1,
         help="Launch a MonteCarlo simulation of given size")
-    
+
     parser.add_argument('-X', nargs='*',
         help='List of floats [X1, X2.. Xp] or PATH to a pickled DOE')
-    
+
     parser.add_argument('-n_cpus', default=-1, type=int,
         help="(Optional) number of cpus to use.")
 
@@ -223,11 +231,12 @@ if __name__ == '__main__':
         choices=['joblib', 'multiprocessing'],
         help="Whether to parallelize using 'joblib' or 'multiprocessing'.")
 
-    parser.add_argument('-run', default=False, type=bool, nargs='?', const='True',
-        help='If True, run the model', choices=[True, False])
+    parser.add_argument('-run', default=False, type=bool, nargs='?',
+        const='True', help='If True, run the model', choices=[True, False])
 
-    parser.add_argument('-dump', default=False, type=bool, nargs='?', const='True',
-        help='If True, dump the output for later posttreatment', choices=[True, False])
+    parser.add_argument('-dump', default=False, type=bool, nargs='?',
+        const='True', choices=[True, False],
+        help='If True, dump the output for later posttreatment')
 
     args = parser.parse_args()
 

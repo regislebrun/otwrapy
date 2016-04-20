@@ -177,6 +177,10 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         # This configures how to run single point simulations on the model :
         self._exec = self.wrapper
 
+        ot.OpenTURNSPythonFunction.__init__(self,
+                self.wrapper.getInputDimension(),
+                self.wrapper.getOutputDimension())
+
         self.setInputDescription(self.wrapper.getInputDescription())
         self.setOutputDescription(self.wrapper.getOutputDescription())
 

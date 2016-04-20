@@ -29,44 +29,24 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
     # Possible configurations
     places = ['phimeca', 'poincare', 'tgcc']
-    configs = {
-               'phimeca':
-                  {
-                   'base_dir': '/home/aguirre/Calculs/Formation-PRACE/beam',
-                   'temp_work_dir': '/tmp'
-                  },
-               'poincare':
-                  {
-                   'base_dir': '/gpfshome/mds/staff/vdubourg/beam',
-                   'temp_work_dir': '/tmp'
-                  },
-               'tgcc':
-                  {
-                   'base_dir': '/ccc/work/cont003/xxx/aguirref/Formation-PRACE/beam',
-                   'temp_work_dir': '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
-                  }
-              }
 
     def __init__(self, where='phimeca', sleep=0.0):
         """
         Parameters
         ----------
         where : string or dict (Optional)
-            Setup configuration according to where you run it. If it is a string,
-            configurations are loaded from Wrapper.configs[where]. If it is a
-            dict, it must have 'base_dir' and 'temp_work_dir' as keys
-            pointing, respectively, to where the executable binary is found and
-            to the base path where runs will be executed (e.g., /tmp or /scratch)
+            Setup configuration according to where you run it.
         """
-        # Look for setup configuration on 'Wrapper.configs[where]'.
-        if isinstance(where, str):
-            assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
-            self.__dict__.update(Wrapper.configs[where])
-        # Take setup configuration from 'where' dict.
-        elif isinstance(where, dict):
-            assert ('base_dir' in where.keys()) \
-               and ('temp_work_dir' in where.keys()), "Wrong configuration dict"
-            self.__dict__.update(where)
+
+        assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
+        self.base_dir = os.path.join(otw.base_dir, 'beam')
+
+        if where == 'phimeca':
+            self.temp_work_dir = '/tmp'
+        if where == 'poincare':
+            self.temp_work_dir = '/tmp'
+        if where == 'tgcc':
+            self.temp_work_dir = '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
 
         self.input_template = os.path.join(self.base_dir, 'beam_input_template.xml')
         self.executable = os.path.join(self.base_dir, 'beam -x beam.xml')
@@ -176,11 +156,7 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         ----------
 
         where : string (Optional)
-            Setup configuration according to where you run it. If it is a string,
-            configurations are loaded from Wrapper.configs[where]. If it is a
-            dict, it must have 'base_dir' and 'temp_work_dir' as keys
-            pointing, respectively, to where the executable binary is found and
-            to the base path where runs will be executed (e.g., /tmp or /scratch)
+            Setup configuration according to where you run it.
 
         backend : string (Optional)
             Whether to parallelize using 'ipython', 'joblib' or 'multiprocessing'.

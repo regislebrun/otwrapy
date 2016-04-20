@@ -54,6 +54,8 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
         # Number of input/output values:
         super(Wrapper, self).__init__(4, 1)
+        self.setInputDescription(['Load', 'Young modulus', 'Length', 'Inertia'])
+        self.setOutputDescription(['deviation'])
 
     def _exec(self, X):
         """Run the model in the shell.
@@ -178,6 +180,8 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
         # This configures how to run single point simulations on the model :
         self._exec = self.wrapper
 
+        self.setInputDescription(self.wrapper.getInputDescription())
+        self.setOutputDescription(self.wrapper.getOutputDescription())
         # This configures how to run samples on the model :
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper

@@ -152,7 +152,7 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
     either 'ipython', 'joblib' or 'multiprocessing'.
     """
     def __init__(self, where='phimeca', backend='joblib',
-        n_cpus=10, view=None, sleep=0.0):
+        n_cpus=10, sleep=0.0):
         """
         Parameters
         ----------
@@ -167,9 +167,6 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
             Number of CPUs on which the simulations will be distributed. Needed Only
             if using 'joblib' or 'multiprocessing' as backend.
 
-        view : IPython load_balanced_view (Optional)
-            If backend is 'ipython', you must pass a view as an argument.
-
         sleep : float (Optional)
             Intentional delay (in seconds) to demonstrate the effect of
             parallelizing.
@@ -182,62 +179,17 @@ class ParallelWrapper(ot.OpenTURNSPythonFunction):
 
         self.setInputDescription(self.wrapper.getInputDescription())
         self.setOutputDescription(self.wrapper.getOutputDescription())
+
         # This configures how to run samples on the model :
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper
         elif backend == 'ipython':
-            assert view is not None, "You have to provide a View to comunicate with IPython engines"
-            self._exec_sample = ot.PythonFunction(func_sample=lambda X:
-                view.map_sync(self.wrapper, X), n=4, p=1)
+            self._exec_sample = otw._exec_sample_ipyparallel(self.wrapper,
+                self.getInputDimension(), self.getOutputDimension())
         elif backend == 'joblib':
-            self._exec_sample = self._exec_sample_joblib
+            self._exec_sample = otw._exec_sample_joblib(self.wrapper, self.n_cpus)
         elif backend == 'multiprocessing':
-            self._exec_sample = self._exec_sample_multiprocessing
-
-        ot.OpenTURNSPythonFunction.__init__(self, 4, 1)
-        self.setInputDescription(['Load', 'Young modulus', 'Length', 'Inertia'])
-        self.setOutputDescription(['deviation'])
-
-    def _exec_sample_joblib(self, X):
-        """Run the model in parallel using joblib.
-
-        Parameters
-        ----------
-        X : 2D array
-            Input sample of size :math:`n x m` on which the model will be evaluated
-        
-        Returns
-        -------
-        Y : NumericalSample
-            Output Sample of the model.
-        """
-        from sklearn.externals.joblib import Parallel, delayed
-        Y = Parallel(n_jobs=self.n_cpus, verbose=10)(delayed(self.wrapper)(x) for x in X)
-        return ot.NumericalSample(Y)
-
-    def _exec_sample_multiprocessing(self, X):
-        """Run the model in parallel using the multiprocessing module.
-
-        Parameters
-        ----------
-        X : 2D array
-            Input sample of size :math:`n x m` on which the model will be evaluated
-        
-        Returns
-        -------
-        Y : NumericalSample
-            Output Sample of the model.
-        """
-
-        from multiprocessing import Pool
-        p = Pool(processes=self.n_cpus)
-        rs = p.map_async(self.wrapper, X)
-        p.close()
-        while not rs.ready():
-            time.sleep(0.1)
-            
-        Y = np.vstack(rs.get())
-        return ot.NumericalSample(Y)
+            self._exec_sample = otw._exec_sample_multiprocessing(self.wrapper, self.n_cpus)
 
 
 if __name__ == '__main__':

@@ -12,6 +12,7 @@ from tempfile import mkdtemp
 import shutil
 from functools import wraps
 import openturns as ot
+import numpy as np
 
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
@@ -121,3 +122,85 @@ class TempWorkDir(object):
         os.chdir(self.curdir)
         if self.cleanup:
             shutil.rmtree(self.dirname)
+
+
+def _exec_sample_joblib(func, n_cpus):
+    """Return a function that executes a sample in parallel using joblib
+
+    Parameters
+    ----------
+    func : Function or calable
+        A callable python object, usually a function. The function should take
+        an input vector as argument and return an output vector.
+
+    n_cpus : int
+        Number of CPUs on which to distribute the function calls.
+
+    Returns
+    -------
+    _exec_sample : Function or callable
+        The parallelized funtion.
+    """
+    from sklearn.externals.joblib import Parallel, delayed
+    def _exec_sample(X):
+        Y = Parallel(n_jobs=n_cpus, verbose=10)(delayed(func)(x) for x in X)
+        return ot.NumericalSample(Y)
+
+    return _exec_sample
+
+
+def _exec_sample_multiprocessing(func, n_cpus):
+    """Return a function that executes a sample in parallel using multiprocessing
+
+    Parameters
+    ----------
+    func : Function or calable
+        A callable python object, usually a function. The function should take
+        an input vector as argument and return an output vector.
+
+    n_cpus : int
+        Number of CPUs on which to distribute the function calls.
+
+    Returns
+    -------
+    _exec_sample : Function or callable
+        The parallelized funtion.
+    """
+
+    import time
+    def _exec_sample(X):
+        from multiprocessing import Pool
+        p = Pool(processes=n_cpus)
+        rs = p.map_async(func, X)
+        p.close()
+        while not rs.ready():
+            time.sleep(0.1)
+
+        Y = np.vstack(rs.get())
+        return ot.NumericalSample(Y)
+    return _exec_sample
+
+
+def _exec_sample_ipyparallel(func, n, p):
+    """Return a function that executes a sample in parallel using ipyparallel
+
+    Parameters
+    ----------
+    func : Function or calable
+        A callable python object, usually a function. The function should take
+        an input vector as argument and return an output vector.
+
+    n_cpus : int
+        Number of CPUs on which to distribute the function calls.
+
+    Returns
+    -------
+    _exec_sample : Function or callable
+        The parallelized funtion.
+    """
+    import ipyparallel as ipp
+
+    rc = ipp.Client()
+
+    return ot.PythonFunction(func_sample=lambda X:
+                rc[:].map_sync(func, X), n=4, p=1)

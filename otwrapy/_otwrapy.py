@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-General purpose OpenTURNS python wrapper
+General purpose OpenTURNS python wrapper tools
 """
 
 import os
@@ -18,6 +18,10 @@ __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
 __version__ = "0.1.1"
 __email__ = "aguirre@phimeca.fr"
+__all__ = ['load_array', 'dump_array', '_exec_sample_joblib',
+           '_exec_sample_multiprocessing', '_exec_sample_ipyparallel',
+           'NumericalMathFunctionDecorator', 'TempWorkDir', 'Parallelizer']
+
 
 base_dir = os.path.dirname(__file__)
 

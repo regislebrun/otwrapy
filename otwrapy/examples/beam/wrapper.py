@@ -19,7 +19,7 @@ __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
 __version__ = "0.1.1"
 __email__ = "aguirre@phimeca.fr"
-
+__all__ = ['Wrapper']
 
 class Wrapper(ot.OpenTURNSPythonFunction):
     """
@@ -44,7 +44,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         """
 
         assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
-        self.base_dir = os.path.join(otw.base_dir, 'beam')
+        self.base_dir = os.path.dirname(__file__)
 
         if where == 'phimeca':
             self.temp_work_dir = '/tmp'
@@ -192,7 +192,7 @@ if __name__ == '__main__':
     print "The wrapper has been instantiated as 'model'."
 
     if args.MonteCarlo is not None:
-        from probability_model import X_distribution
+        from _probability_model import X_distribution
         ot.RandomGenerator.SetSeed(args.seed)
         N = int(args.MonteCarlo[0])
         X = X_distribution.getSample(N)

@@ -204,3 +204,52 @@ def _exec_sample_ipyparallel(func, n, p):
 
     return ot.PythonFunction(func_sample=lambda X:
                 rc[:].map_sync(func, X), n=4, p=1)
+
+@NumericalMathFunctionDecorator(enableCache=True)
+class Parallelizer(ot.OpenTURNSPythonFunction):
+    """
+    Class that distributes calls to the class Wrapper across a cluster using
+    either 'ipython', 'joblib' or 'multiprocessing'.
+    """
+    def __init__(self, wrapper, backend='joblib', n_cpus=10):
+        """
+        Parameters
+        ----------
+
+        where : string (Optional)
+            Setup configuration according to where you run it.
+
+        backend : string (Optional)
+            Whether to parallelize using 'ipython', 'joblib' or 'multiprocessing'.
+
+        n_cpus : int (Optional)
+            Number of CPUs on which the simulations will be distributed. Needed Only
+            if using 'joblib' or 'multiprocessing' as backend.
+
+        sleep : float (Optional)
+            Intentional delay (in seconds) to demonstrate the effect of
+            parallelizing.
+        """
+
+        self.n_cpus = n_cpus
+        self.wrapper = wrapper
+        # This configures how to run single point simulations on the model :
+        self._exec = self.wrapper
+
+        ot.OpenTURNSPythonFunction.__init__(self,
+                self.wrapper.getInputDimension(),
+                self.wrapper.getOutputDimension())
+
+        self.setInputDescription(self.wrapper.getInputDescription())
+        self.setOutputDescription(self.wrapper.getOutputDescription())
+
+        # This configures how to run samples on the model :
+        if self.n_cpus == 1:
+            self._exec_sample = self.wrapper
+        elif backend == 'ipython':
+            self._exec_sample = _exec_sample_ipyparallel(self.wrapper,
+                self.getInputDimension(), self.getOutputDimension())
+        elif backend == 'joblib':
+            self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus)
+        elif backend == 'multiprocessing':
+            self._exec_sample = _exec_sample_multiprocessing(self.wrapper, self.n_cpus)

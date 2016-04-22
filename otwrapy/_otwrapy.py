@@ -251,8 +251,17 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper
         elif backend == 'ipython':
-            self._exec_sample = _exec_sample_ipyparallel(self.wrapper,
-                self.getInputDimension(), self.getOutputDimension())
+            try:
+                import ipyparallel as ipp
+                rc = ipp.Client()
+                self._exec_sample = _exec_sample_ipyparallel(self.wrapper,
+                    self.getInputDimension(), self.getOutputDimension())
+            except (ipp.error.TimeoutError, IOError) as e:
+                import logging
+                logging.warn('Unable to connect to an ipython cluster. ' +
+                    'Using multiprocessing backend instead')
+                self._exec_sample = _exec_sample_multiprocessing(self.wrapper,
+                    self.n_cpus)
         elif backend == 'joblib':
             self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus)
         elif backend == 'multiprocessing':

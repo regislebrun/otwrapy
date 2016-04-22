@@ -250,19 +250,52 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         # This configures how to run samples on the model :
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper
+
         elif backend == 'ipython':
+            # Check that ipyparallel is installed
             try:
                 import ipyparallel as ipp
-                rc = ipp.Client()
+                # If it is, see if there is a cluster running
+                try:
+                    rc = ipp.Client()
+                    ipy_backend = True
+                except (ipp.error.TimeoutError, IOError) as e:
+                    ipy_backend = False
+                    import logging
+                    logging.warn('Unable to connect to an ipython cluster.')
+            except ImportError:
+                ipy_backend = False
+                import logging
+                logging.warn('ipyparallel package missing.')
+
+            if ipy_backend:
                 self._exec_sample = _exec_sample_ipyparallel(self.wrapper,
                     self.getInputDimension(), self.getOutputDimension())
-            except (ipp.error.TimeoutError, IOError) as e:
-                import logging
-                logging.warn('Unable to connect to an ipython cluster. ' +
-                    'Using multiprocessing backend instead')
+            else:
+                logging.warn('Using multiprocessing backend instead')
                 self._exec_sample = _exec_sample_multiprocessing(self.wrapper,
                     self.n_cpus)
+
         elif backend == 'joblib':
-            self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus)
+            # Check that joblib is installed
+            try:
+                import joblib
+                joblib_backend = True
+            except ImportError:
+                try:
+                    from sklearn.externals import joblib
+                    joblib_backend = True
+                except ImportError:
+                    joblib_backend = False
+                    import logging
+                    logging.warn('ipyparallel package missing.')
+
+            if joblib_backend:
+                self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus)
+            else:
+                logging.warn('Using multiprocessing backend instead')
+                self._exec_sample = _exec_sample_multiprocessing(self.wrapper,
+                    self.n_cpus)
+
         elif backend == 'multiprocessing':
             self._exec_sample = _exec_sample_multiprocessing(self.wrapper, self.n_cpus)

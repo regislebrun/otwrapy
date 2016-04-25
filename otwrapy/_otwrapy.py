@@ -48,6 +48,11 @@ class NumericalMathFunctionDecorator(object):
 
     This class is intended to be used as a decorator.
 
+    Parameters
+    ----------
+    enableCache : bool (Optional)
+        If True, enable cache of the returned ot.NumericalMathFunction
+
     Notes
     -----
     I wanted this decorator to work also with Wrapper class, but it only works
@@ -64,12 +69,6 @@ class NumericalMathFunctionDecorator(object):
     """
 
     def __init__(self, enableCache=True, doc=None):
-        """
-        Parameters
-        ----------
-        enableCache : bool (Optional)
-            If True, enable cache of the returned ot.NumericalMathFunction
-        """
         self.enableCache = enableCache
         self.doc = doc
 
@@ -101,22 +100,22 @@ class TempWorkDir(object):
     Create a temporary working directory on `base_temp_work_dir` preceeded by
     `prefix` and clean up at the exit if neccesary.
     See: http://sametmax.com/les-context-managers-et-le-mot-cle-with-en-python/
+
+    Parameters
+    ----------
+    base_temp_work_dir : str (optional)
+        Root path where the temporary working directory will be created.
+        Default = '/tmp'
+
+    prefix : str (optional)
+        String that preceeds the directory name.
+        Default = 'run-'
+
+    cleanup : bool (optional)
+        If True erase the directory and its children at the exit.
+        Default = False
     """
     def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False):
-        """
-        Parameters
-        ----------
-        base_temp_work_dir : str (optional)
-            Root path where the temporary working directory will be created.
-            Default = '/tmp'
-
-        prefix : str (optional)
-            String that preceeds the directory name. Default = 'run-'
-
-        cleanup : bool (optional)
-            If True remove the directory and its children at the exit.
-            Default = False
-        """
         self.dirname = mkdtemp(dir=base_temp_work_dir, prefix=prefix)
         self.cleanup = cleanup
     def __enter__(self):
@@ -214,27 +213,25 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     """
     Class that distributes calls to the class Wrapper across a cluster using
     either 'ipython', 'joblib' or 'multiprocessing'.
+
+    Parameters
+    ----------
+
+    where : string (Optional)
+        Setup configuration according to where you run it.
+
+    backend : string (Optional)
+        Whether to parallelize using 'ipython', 'joblib' or 'multiprocessing'.
+
+    n_cpus : int (Optional)
+        Number of CPUs on which the simulations will be distributed. Needed Only
+        if using 'joblib' or 'multiprocessing' as backend.
+
+    sleep : float (Optional)
+        Intentional delay (in seconds) to demonstrate the effect of
+        parallelizing.
     """
     def __init__(self, wrapper, backend='joblib', n_cpus=10):
-        """
-        Parameters
-        ----------
-
-        where : string (Optional)
-            Setup configuration according to where you run it.
-
-        backend : string (Optional)
-            Whether to parallelize using 'ipython', 'joblib' or 'multiprocessing'.
-
-        n_cpus : int (Optional)
-            Number of CPUs on which the simulations will be distributed. Needed Only
-            if using 'joblib' or 'multiprocessing' as backend.
-
-        sleep : float (Optional)
-            Intentional delay (in seconds) to demonstrate the effect of
-            parallelizing.
-        """
-
         self.n_cpus = n_cpus
         self.wrapper = wrapper
         # This configures how to run single point simulations on the model :

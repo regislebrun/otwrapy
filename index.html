@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to otwrapy’s documentation! &mdash; otwrapy  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/Icon.ico"/>
+    <link rel="top" title="otwrapy  documentation" href="#" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-otwrapy-s-documentation">
+<h1>Welcome to otwrapy&#8217;s documentation!<a class="headerlink" href="#welcome-to-otwrapy-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p><code class="code docutils literal"><span class="pre">otwrapy</span></code> is a collection of tools that simplify the task of wrapping
+external codes in a Python environment. It provides:</p>
+<ul class="simple">
+<li>A <code class="code docutils literal"><span class="pre">NumericalMathFunction</span></code> decorator</li>
+<li>A context manager for temporary working directories
+<code class="code docutils literal"><span class="pre">TempWorkDir</span></code>.</li>
+<li>A Parallelizer function that converts any <code class="code docutils literal"><span class="pre">NumericalMathFunction</span></code> into
+a parralel wrapper using either <code class="code docutils literal"><span class="pre">multiprocessing</span></code>,
+<code class="code docutils literal"><span class="pre">ipyparallel</span></code> or <code class="code docutils literal"><span class="pre">joblib</span></code>.</li>
+</ul>
+<p>The tools are built on top of <a class="reference external" href="http://www.openturns.org">OpenTURNS</a>, with its users as the target
+audience. You can either use it as a module. For example :</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">otwrapy</span> <span class="kn">as</span> <span class="nn">otw</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">otw</span><span class="o">.</span><span class="n">Parallelizer</span><span class="p">(</span><span class="n">Wrapper</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;joblib&#39;</span><span class="p">,</span> <span class="n">n_cpus</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In which case, <code class="code docutils literal"><span class="pre">model</span></code> will be your parallelized wrapper using
+<code class="code docutils literal"><span class="pre">joblib</span></code> as a backend and as many cpus as available in your
+machine (<code class="code docutils literal"><span class="pre">n_cpus=-1</span></code>). Or you can simply consider this as a
+cookbook and take what you consider useful.</p>
+<p><code class="code docutils literal"><span class="pre">otwrapy</span></code> comes from the experience of wrapping a lot of
+different external codes at <a class="reference external" href="http://www.phimeca.com">Phimeca engineering</a>. We are a company specialized on
+uncertainty treatment and we assist our clients introducing the
+probabilistic dimension in their so far deterministic studies.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">While fully usable, otwrapy is still pre-1.0 software and has <strong>no</strong>
+backwards compatibility guarantees until the 1.0 release occurs! Please
+make sure to be carefully <strong>anytime you upgrade</strong>!</p>
+</div>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>In a terminal, type in :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>$ python setup.py install
+</pre></div>
+</div>
+<p>Test are available in the &#8216;tests&#8217; directory. They can be launched with
+the following command in a terminal in the otwrapy directory:</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>$ py.test
+</pre></div>
+</div>
+</div>
+<div class="section" id="dependencies">
+<h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>numpy</li>
+<li>openturns</li>
+<li>ipyparallel (optional)</li>
+<li>joblib (optional). scikit-learn comes with joblib installed (sklearn.externals.joblib)</li>
+<li>pytest (optional for testing)</li>
+<li>sphinx and numpydoc for building the doc</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/LogoPhiHaut.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Collection of tools that simplify the task of wrapping external codes in a Python environment. Proudly develloped at Phimeca engineering.</p>
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=felipeam86&repo=otwrapy&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/felipeam86/otwrapy" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

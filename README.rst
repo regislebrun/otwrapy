@@ -10,7 +10,9 @@ external codes in a Python environment. It provides:
 
 The tools are built on top of `OpenTURNS
 <http://www.openturns.org>`_, with its users as the target
-audience. You can either use it as a module. For example :
+audience. Documentation is available
+`here <http://felipeam86.github.io/otwrapy/>`_.You can either use it as a
+module. For example :
 
 
 .. code-block:: python

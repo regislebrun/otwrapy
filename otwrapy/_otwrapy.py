@@ -16,7 +16,7 @@ import numpy as np
 
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2016, Phimeca Engineering"
-__version__ = "0.2"
+__version__ = "0.3"
 __email__ = "aguirre@phimeca.fr"
 __all__ = ['load_array', 'dump_array', '_exec_sample_joblib',
            '_exec_sample_multiprocessing', '_exec_sample_ipyparallel',

@@ -1,6 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+General purpose OpenTURNS python wrapper
+"""
+
+__all__ = ['X_distribution']
+
 import openturns as ot
 import numpy as np
-sample_E = ot.NumericalSample.ImportFromCSVFile("sample_E.csv") 
+import os
+
+sample_E = ot.NumericalSample.ImportFromCSVFile(
+    os.path.join(os.path.dirname(__file__), "sample_E.csv"))
 kernel_smoothing = ot.KernelSmoothing(ot.Normal())
 bandwidth = kernel_smoothing.computeSilvermanBandwidth(sample_E)
 E = kernel_smoothing.build(sample_E, bandwidth)

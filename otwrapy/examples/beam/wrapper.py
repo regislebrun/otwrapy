@@ -30,29 +30,21 @@ class Wrapper(ot.OpenTURNSPythonFunction):
     # Possible configurations
     places = ['phimeca', 'poincare', 'tgcc']
 
-    def __init__(self, where='phimeca', sleep=0.0):
+    def __init__(self, tmpdir='/tmp', sleep=0.0):
         """
         Parameters
         ----------
-        where : string
-            Where the wrapper will be physically run. The temporary working
-            directory depends on this.
+        tmpdir : string
+            The root directory on which temporary working directories will be
+            created for each independent simulation.
 
         sleep : float (Optional)
             Intentional delay (in seconds) to demonstrate the effect of
             parallelizing.
         """
 
-        assert where in Wrapper.places, "Only valid places are {}".format(Wrapper.places)
         self.base_dir = os.path.dirname(__file__)
-
-        if where == 'phimeca':
-            self.temp_work_dir = '/tmp'
-        if where == 'poincare':
-            self.temp_work_dir = '/tmp'
-        if where == 'tgcc':
-            self.temp_work_dir = '/ccc/scratch/cont003/xxx/aguirref/Formation-PRACE/'
-
+        self.temp_work_dir = tmpdir
         self.input_template = os.path.join(self.base_dir,
             'beam_input_template.xml')
         self.executable = os.path.join(self.base_dir,
@@ -157,9 +149,9 @@ if __name__ == '__main__':
         description="Python wrapper example used for the PRACE training on HPC and uncertainty.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-where', default='poincare', type=str,
-        choices=['phimeca', 'poincare', 'tgcc'],
-        help='Place where simulations will run.')
+    parser.add_argument('-tmp', default='/tmp', type=str,
+        help='Root directory on which temporary working directories will be' +
+             'created for each independent simulation.')
 
     parser.add_argument('-seed', default=int(0), type=int,
         help='Seed number for the random number generator')
@@ -186,7 +178,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    model = otw.Parallelizer(Wrapper(where='phimeca', sleep=1),
+    model = otw.Parallelizer(Wrapper(tmpdir=args.tmp, sleep=1),
         backend=args.backend, n_cpus=args.n_cpus)
 
     print "The wrapper has been instantiated as 'model'."

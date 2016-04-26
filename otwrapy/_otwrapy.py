@@ -83,7 +83,7 @@ class NumericalMathFunctionDecorator(object):
             # Update __doc__ of the function
             if self.doc is None:
                 # Inherit __doc__ from ParallelWrapper.
-                func.__doc__ = wrapper.__doc__ + wrapper.__init__.__doc__
+                func.__doc__ = wrapper.__doc__
             else:
                 func.__doc__ = self.doc
 

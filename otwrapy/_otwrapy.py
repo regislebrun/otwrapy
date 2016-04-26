@@ -144,7 +144,10 @@ def _exec_sample_joblib(func, n_cpus):
     _exec_sample : Function or callable
         The parallelized funtion.
     """
-    from sklearn.externals.joblib import Parallel, delayed
+    try:
+        from joblib import Parallel, delayed
+    except ImportError:
+        from sklearn.externals.joblib import Parallel, delayed
     def _exec_sample(X):
         Y = Parallel(n_jobs=n_cpus, verbose=10)(delayed(func)(x) for x in X)
         return ot.NumericalSample(Y)

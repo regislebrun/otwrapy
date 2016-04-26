@@ -166,7 +166,7 @@ if __name__ == '__main__':
         help="(Optional) number of cpus to use.")
 
     parser.add_argument('-backend', default='joblib', type=str,
-        choices=['joblib', 'multiprocessing'],
+        choices=['joblib', 'multiprocessing', 'ipyparallel'],
         help="Whether to parallelize using 'joblib' or 'multiprocessing'.")
 
     parser.add_argument('-run', default=False, type=bool, nargs='?',

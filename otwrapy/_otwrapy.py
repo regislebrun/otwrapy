@@ -232,6 +232,12 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         parallelizing.
     """
     def __init__(self, wrapper, backend='joblib', n_cpus=10):
+
+        # -1 cpus means all available cpus
+        if n_cpus == -1:
+            import multiprocessing
+            n_cpus = multiprocessing.cpu_count()
+
         self.n_cpus = n_cpus
         self.wrapper = wrapper
         # This configures how to run single point simulations on the model :

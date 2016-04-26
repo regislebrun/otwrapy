@@ -80,7 +80,8 @@ html_theme_options = {
     'github_user': 'felipeam86',
     'github_repo': 'otwrapy',
     'github_banner': True,
-    'show_related': True
+    'show_related': True,
+    'analytics_id': 'UA-76867657-1'
 }
 
 # The name of an image file (within the static path) to use as favicon of the

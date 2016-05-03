@@ -56,6 +56,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         self.setInputDescription(['Load', 'Young modulus', 'Length', 'Inertia'])
         self.setOutputDescription(['deviation'])
 
+    @otw.Debug('beam_wrapper.log')
     def _exec(self, X):
         """Run the model in the shell.
 

@@ -11,6 +11,7 @@ import pickle
 from tempfile import mkdtemp
 import shutil
 from functools import wraps
+import logging
 import openturns as ot
 import numpy as np
 
@@ -20,7 +21,8 @@ __version__ = "0.3"
 __email__ = "aguirre@phimeca.fr"
 __all__ = ['load_array', 'dump_array', '_exec_sample_joblib',
            '_exec_sample_multiprocessing', '_exec_sample_ipyparallel',
-           'NumericalMathFunctionDecorator', 'TempWorkDir', 'Parallelizer']
+           'NumericalMathFunctionDecorator', 'TempWorkDir', 'Parallelizer',
+           'create_logger', 'Debug']
 
 
 base_dir = os.path.dirname(__file__)
@@ -42,6 +44,71 @@ def dump_array(array, filename, compress=False):
         with open(filename, 'wb') as fh:
             pickle.dump(array, fh, protocol=2)
 
+def create_logger(logfile, loglevel=None):
+    """Create a logger with a FileHandler at the given loglevel
+
+    Parameters
+    ----------
+    logfile : str
+        Filename for the logger FileHandler to be created.
+
+    loglevel : logging level
+        Threshold for the logger. Logging messages which are less severe than 
+        loglevel will be ignored. It defaults to logging.DEBUG.
+    """
+    if loglevel is None:
+        loglevel = logging.DEBUG
+
+    logger = logging.getLogger("vgp")
+    logger.setLevel(loglevel)
+
+    # ----------------------------------------------------------
+    # Create file handler which logs even DEBUG messages
+    fh = logging.FileHandler(filename=logfile, mode='w')
+    fh.setLevel(logging.DEBUG)
+
+    # Create a formatter for the file handlers
+    formatter = logging.Formatter(
+        fmt='%(asctime)s %(levelname)-8s %(message)s',
+        datefmt='%y-%m-%d %H:%M:%S')
+
+    fh.setFormatter(formatter)
+
+    # Add the handler to the logger
+    logger.addHandler(fh)
+
+    return logger
+
+class Debug(object):
+    """Decorator --> catch exceptions inside a function and log them.
+    A decorator used to protect functions so that exceptions are logged to a
+    file. It can either be instantiated with a Logger or with a filename for
+    which a logger with be created with a FileHandler.
+
+    Parameters
+    ----------
+    logger : logging.Logger or str
+        Either a Logger instance or a filename for the logger to be created
+    """
+
+    def __init__(self, logger, loglevel=None):
+        if isinstance(logger, logging.Logger):
+            self.logger = logger
+            if loglevel is not None:
+                self.logger.setLevel(loglevel)
+        elif isinstance(logger, str):
+            self.logger = create_logger(logger, loglevel=loglevel)
+
+    def __call__(self, func):
+        @wraps(func)
+        def func_debugged(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception, e:
+                self.logger.error(e, exc_info=True)
+                raise e
+
+        return func_debugged
 
 class NumericalMathFunctionDecorator(object):
     """Convert an OpenTURNSPythonFunction into a NumericalMathFunction

@@ -334,7 +334,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         Intentional delay (in seconds) to demonstrate the effect of
         parallelizing.
     """
-    def __init__(self, wrapper, backend='joblib', n_cpus=10):
+    def __init__(self, wrapper, backend='multiprocessing', n_cpus=10):
 
         # -1 cpus means all available cpus
         if n_cpus == -1:

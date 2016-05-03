@@ -375,6 +375,9 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         self.setInputDescription(self.wrapper.getInputDescription())
         self.setOutputDescription(self.wrapper.getOutputDescription())
 
+        assert backend in ['ipython', 'ipyparallel', 'multiprocessing',
+        'joblib'], "Unknown backend"
+
         # This configures how to run samples on the model :
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper

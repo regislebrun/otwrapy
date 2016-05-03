@@ -6,27 +6,27 @@ on top of `OpenTURNS <http://www.openturns.org>`_, with its users as the target
 audience. Documentation is available
 `here <http://felipeam86.github.io/otwrapy/>`_. The module provides :
 
-- A :class:`Parallelizer` class that converts any
-  :py:class:`openturns.NumericalMathFunction` into  a parallel wrapper using
-  either
+- A :code:`Parallelizer` class that converts any
+  `ot.NumericalMathFunction <http://doc.openturns.org/openturns-latest/sphinx/user_manual/_generated/openturns.NumericalMathFunction.html#openturns.NumericalMathFunction>`_
+  into  a parallel wrapper using either
   `multiprocessing <https://docs.python.org/2/library/multiprocessing.html>`_,
   `ipyparallel <http://ipyparallel.readthedocs.io/en/latest/>`_ or
   `joblib <https://pythonhosted.org/joblib/>`_.
 - A set of usefull tools that simply recurrent tasks when constructing code
   wrappers:
 
-    - :class:`TempWorkDir`: Context manager that gracefully creates a temporary
-      working directory. It is prone to errors and has the option to cleanup at
-      the exit.
-    - :class:`Debug`: Decorator that protects the decorated function into a
-      try/except structure so that errors are logged. It is specially usefull
-      when you launch your code in a non interactive environement.
-    - :class:`load_array` and :class:`dump_array`: Used for efficiently create
-      and load backups with the option to compress with gzip.
-    - :class:`safemakedirs`: Create a directory without raising an exception if
-      it exits.
-    - :class:`create_logger`: Return a logger with a FileHandler at a given
-      logging level.
+  - :code:`TempWorkDir`: Context manager that gracefully creates a temporary
+    working directory. It is prone to errors and has the option to cleanup at
+    the exit.
+  - :code:`Debug`: Decorator that protects the decorated function into a
+    try/except structure so that errors are logged. It is specially usefull
+    when you launch your code in a non interactive environement.
+  - :code:`load_array` and :code:`dump_array`: Used for efficiently create
+    and load backups with the option to compress with gzip.
+  - :code:`safemakedirs`: Create a directory without raising an exception if
+    it exits.
+  - :code:`create_logger`: Return a logger with a FileHandler at a given
+    logging level.
 
 :code:`otwrapy` comes from the experience of wrapping a lot of
 different external codes at `Phimeca engineering

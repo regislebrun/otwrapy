@@ -28,8 +28,18 @@ __all__ = ['load_array', 'dump_array', '_exec_sample_joblib',
 base_dir = os.path.dirname(__file__)
 
 
-def load_array(filename, compress=False):
-    if compress or (filename.split('.')[-1] == 'pklz'):
+def load_array(filename, compressed=False):
+    """Load a (possibly compressed) pickled array.
+
+    Parameters
+    ----------
+    filename : str
+        Path to the file to be loaded. If the extension is '.pklz', it considers
+        that the file is compressed with *gzip*.
+    compressed : bool
+        Indicates if the file is compressed with gzip or not.
+    """
+    if compressed or (filename.split('.')[-1] == 'pklz'):
         with gzip.open(filename, 'rb') as fh:
             return pickle.load(fh)
     else:
@@ -37,6 +47,18 @@ def load_array(filename, compress=False):
             return pickle.load(fh)
 
 def dump_array(array, filename, compress=False):
+    """Dump an array to a (possibly compressed) file
+
+    Parameters
+    ----------
+    array : array
+        Array to be compressed. Typically a np.array or ot.NumericalSample.
+    filename : str
+        Path where the file is dumped. If the extension is '.pklz', it considers
+        that the file has to be compressed with *gzip*.
+    compressed : bool
+        Indicates if the file has to be compressed with gzip or not.
+    """
     if compress or (filename.split('.')[-1] == 'pklz'):
         with gzip.open(filename, 'wb') as fh:
             pickle.dump(array, fh, protocol=2)
@@ -96,14 +118,14 @@ def create_logger(logfile, loglevel=None):
     return logger
 
 class Debug(object):
-    """Decorator --> catch exceptions inside a function and log them.
+    """Decorator that catches exceptions inside a function and logs them.
 
     A decorator used to protect functions so that exceptions are logged to a
     file. It can either be instantiated with a Logger or with a filename for
     which a logger will be created with a FileHandler. It comes specialy handy
     when you launch your codes in a non interactive environement (e.g., HPC
-    cluster through submission scripts), given that Exceptions are captured and
-    logged to a file.
+    cluster through submission scripts), given that Exceptions are captured
+    and logged to a file.
 
     The great benefit of this implementation is that with a simple decorator
     you can protect the methods of your Wrapper class with a try/except
@@ -120,7 +142,7 @@ class Debug(object):
         Either a Logger instance or a filename for the logger to be created.
 
     loglevel : logging level
-        Threshold for the logger. Logging messages which are less severe than 
+        Threshold for the logger. Logging messages which are less severe than
         loglevel will be ignored. It defaults to logging.DEBUG.
     """
 
@@ -156,7 +178,7 @@ class NumericalMathFunctionDecorator(object):
     Notes
     -----
     I wanted this decorator to work also with Wrapper class, but it only works
-    with ParallelWrapper for the moment. Tje problem is that, apparently,
+    with ParallelWrapper for the moment. The problem is that, apparently,
     decorated classes are not pickable, and Wrapper instances must be pickable
     so that they can be easily distributed with `multiprocessing`
 
@@ -197,6 +219,7 @@ class NumericalMathFunctionDecorator(object):
 
 class TempWorkDir(object):
     """Implement a context manager that creates a temporary working directory.
+
     Create a temporary working directory on `base_temp_work_dir` preceeded by
     `prefix` and clean up at the exit if neccesary.
     See: http://sametmax.com/les-context-managers-et-le-mot-cle-with-en-python/
@@ -313,9 +336,7 @@ def _exec_sample_ipyparallel(func, n, p):
 
 @NumericalMathFunctionDecorator(enableCache=True)
 class Parallelizer(ot.OpenTURNSPythonFunction):
-    """
-    Class that distributes calls to the class Wrapper across a cluster using
-    either 'ipython', 'joblib' or 'multiprocessing'.
+    """Parallelize a Wrapper using 'ipyparallel', 'joblib' or 'multiprocessing'.
 
     Parameters
     ----------
@@ -324,7 +345,8 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         Setup configuration according to where you run it.
 
     backend : string (Optional)
-        Whether to parallelize using 'ipython', 'joblib' or 'multiprocessing'.
+        Whether to parallelize using 'ipyparallel', 'joblib' or
+        'multiprocessing'.
 
     n_cpus : int (Optional)
         Number of CPUs on which the simulations will be distributed. Needed Only

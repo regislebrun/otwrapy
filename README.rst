@@ -1,29 +1,32 @@
+.. currentmodule:: otwrapy
+
 :code:`otwrapy` is a collection of tools that simplify the task of wrapping
-external codes in a Python environment. It provides:
-
-- A :code:`NumericalMathFunction` decorator
-- A context manager for temporary working directories
-  :code:`TempWorkDir`.
-- A Parallelizer function that converts any :code:`NumericalMathFunction` into
-  a parralel wrapper using either :code:`multiprocessing`,
-  :code:`ipyparallel` or :code:`joblib`.
-
-The tools are built on top of `OpenTURNS
-<http://www.openturns.org>`_, with its users as the target
+external codes in a Python environment as well as parallelizing it. It is built
+on top of `OpenTURNS <http://www.openturns.org>`_, with its users as the target
 audience. Documentation is available
-`here <http://felipeam86.github.io/otwrapy/>`_.You can either use it as a
-module. For example :
+`here <http://felipeam86.github.io/otwrapy/>`_. The module provides :
 
+- A :class:`Parallelizer` class that converts any
+  :py:class:`openturns.NumericalMathFunction` into  a parallel wrapper using
+  either
+  `multiprocessing <https://docs.python.org/2/library/multiprocessing.html>`_,
+  `ipyparallel <http://ipyparallel.readthedocs.io/en/latest/>`_ or
+  `joblib <https://pythonhosted.org/joblib/>`_.
+- A set of usefull tools that simply recurrent tasks when constructing code
+  wrappers:
 
-.. code-block:: python
-
-    import otwrapy as otw
-    model = otw.Parallelizer(Wrapper(...), backend='joblib', n_cpus=-1)
-
-In which case, :code:`model` will be your parallelized wrapper using
-:code:`joblib` as a backend and as many cpus as available in your
-machine (:code:`n_cpus=-1`). Or you can simply consider this as a
-cookbook and take what you consider useful.
+    - :class:`TempWorkDir`: Context manager that gracefully creates a temporary
+      working directory. It is prone to errors and has the option to cleanup at
+      the exit.
+    - :class:`Debug`: Decorator that protects the decorated function into a
+      try/except structure so that errors are logged. It is specially usefull
+      when you launch your code in a non interactive environement.
+    - :class:`load_array` and :class:`dump_array`: Used for efficiently create
+      and load backups with the option to compress with gzip.
+    - :class:`safemakedirs`: Create a directory without raising an exception if
+      it exits.
+    - :class:`create_logger`: Return a logger with a FileHandler at a given
+      logging level.
 
 :code:`otwrapy` comes from the experience of wrapping a lot of
 different external codes at `Phimeca engineering
@@ -31,35 +34,11 @@ different external codes at `Phimeca engineering
 uncertainty treatment and we assist our clients introducing the
 probabilistic dimension in their so far deterministic studies.
 
+
+
 .. warning::
     While fully usable, otwrapy is still pre-1.0 software and has **no**
     backwards compatibility guarantees until the 1.0 release occurs! Please
-    make sure to be carefully **anytime you upgrade**!
-
-
-Installation
-============
-
-In a terminal, type in :
-
-.. code-block:: shell
-
-    $ python setup.py install
-
-Test are available in the 'tests' directory. They can be launched with
-the following command in a terminal in the otwrapy directory:
-
-.. code-block:: shell
-    
-    $ py.test
-
-Dependencies
-============
-- numpy
-- openturns
-- ipyparallel (optional)
-- joblib (optional). scikit-learn comes with joblib installed (sklearn.externals.joblib)
-- pytest (optional for testing)
-- sphinx and numpydoc for building the doc
+    make sure to be carefull **anytime you upgrade**!
 
 

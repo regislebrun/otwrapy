@@ -357,7 +357,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         if self.n_cpus == 1:
             self._exec_sample = self.wrapper
 
-        elif backend == 'ipython':
+        elif (backend == 'ipython') or (backend == 'ipyparallel'):
             # Check that ipyparallel is installed
             try:
                 import ipyparallel as ipp

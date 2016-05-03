@@ -1,0 +1,6 @@
+otwrapy.safemakedirs
+====================
+
+.. currentmodule:: otwrapy
+
+.. autofunction:: safemakedirs

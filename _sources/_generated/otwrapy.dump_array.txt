@@ -1,0 +1,6 @@
+otwrapy.dump_array
+==================
+
+.. currentmodule:: otwrapy
+
+.. autofunction:: dump_array

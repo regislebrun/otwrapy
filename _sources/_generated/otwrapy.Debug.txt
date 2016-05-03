@@ -1,0 +1,22 @@
+otwrapy.Debug
+=============
+
+.. currentmodule:: otwrapy
+
+.. autoclass:: Debug
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Debug.__init__
+   
+   
+
+   
+   
+   

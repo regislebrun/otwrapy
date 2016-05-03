@@ -1,0 +1,6 @@
+otwrapy.create_logger
+=====================
+
+.. currentmodule:: otwrapy
+
+.. autofunction:: create_logger

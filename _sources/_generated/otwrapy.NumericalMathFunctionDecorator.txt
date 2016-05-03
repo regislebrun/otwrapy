@@ -1,0 +1,22 @@
+otwrapy.NumericalMathFunctionDecorator
+======================================
+
+.. currentmodule:: otwrapy
+
+.. autoclass:: NumericalMathFunctionDecorator
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NumericalMathFunctionDecorator.__init__
+   
+   
+
+   
+   
+   

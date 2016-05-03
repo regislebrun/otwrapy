@@ -1,0 +1,6 @@
+otwrapy.Parallelizer
+====================
+
+.. currentmodule:: otwrapy
+
+.. autofunction:: Parallelizer

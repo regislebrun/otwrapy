@@ -25,6 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/Icon.ico"/>
     <link rel="top" title="otwrapy  documentation" href="#" />
+    <link rel="next" title="Getting started" href="getting_started.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -40,27 +41,34 @@
   <div class="section" id="welcome-to-otwrapy-s-documentation">
 <h1>Welcome to otwrapy&#8217;s documentation!<a class="headerlink" href="#welcome-to-otwrapy-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p><code class="code docutils literal"><span class="pre">otwrapy</span></code> is a collection of tools that simplify the task of wrapping
-external codes in a Python environment. It provides:</p>
-<ul class="simple">
-<li>A <code class="code docutils literal"><span class="pre">NumericalMathFunction</span></code> decorator</li>
-<li>A context manager for temporary working directories
-<code class="code docutils literal"><span class="pre">TempWorkDir</span></code>.</li>
-<li>A Parallelizer function that converts any <code class="code docutils literal"><span class="pre">NumericalMathFunction</span></code> into
-a parralel wrapper using either <code class="code docutils literal"><span class="pre">multiprocessing</span></code>,
-<code class="code docutils literal"><span class="pre">ipyparallel</span></code> or <code class="code docutils literal"><span class="pre">joblib</span></code>.</li>
-</ul>
-<p>The tools are built on top of <a class="reference external" href="http://www.openturns.org">OpenTURNS</a>, with its users as the target
+external codes in a Python environment as well as parallelizing it. It is built
+on top of <a class="reference external" href="http://www.openturns.org">OpenTURNS</a>, with its users as the target
 audience. Documentation is available
-<a class="reference external" href="http://felipeam86.github.io/otwrapy/">here</a>.You can either use it as a
-module. For example :</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">otwrapy</span> <span class="kn">as</span> <span class="nn">otw</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">otw</span><span class="o">.</span><span class="n">Parallelizer</span><span class="p">(</span><span class="n">Wrapper</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;joblib&#39;</span><span class="p">,</span> <span class="n">n_cpus</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>In which case, <code class="code docutils literal"><span class="pre">model</span></code> will be your parallelized wrapper using
-<code class="code docutils literal"><span class="pre">joblib</span></code> as a backend and as many cpus as available in your
-machine (<code class="code docutils literal"><span class="pre">n_cpus=-1</span></code>). Or you can simply consider this as a
-cookbook and take what you consider useful.</p>
+<a class="reference external" href="http://felipeam86.github.io/otwrapy/">here</a>. The module provides :</p>
+<ul class="simple">
+<li>A <code class="code docutils literal"><span class="pre">Parallelizer</span></code> class that converts any
+<a class="reference external" href="http://doc.openturns.org/openturns-latest/sphinx/user_manual/_generated/openturns.NumericalMathFunction.html#openturns.NumericalMathFunction">ot.NumericalMathFunction</a>
+into  a parallel wrapper using either
+<a class="reference external" href="https://docs.python.org/2/library/multiprocessing.html">multiprocessing</a>,
+<a class="reference external" href="http://ipyparallel.readthedocs.io/en/latest/">ipyparallel</a> or
+<a class="reference external" href="https://pythonhosted.org/joblib/">joblib</a>.</li>
+<li>A set of usefull tools that simply recurrent tasks when constructing code
+wrappers:<ul>
+<li><code class="code docutils literal"><span class="pre">TempWorkDir</span></code>: Context manager that gracefully creates a temporary
+working directory. It is prone to errors and has the option to cleanup at
+the exit.</li>
+<li><code class="code docutils literal"><span class="pre">Debug</span></code>: Decorator that protects the decorated function into a
+try/except structure so that errors are logged. It is specially usefull
+when you launch your code in a non interactive environement.</li>
+<li><code class="code docutils literal"><span class="pre">load_array</span></code> and <code class="code docutils literal"><span class="pre">dump_array</span></code>: Used for efficiently create
+and load backups with the option to compress with gzip.</li>
+<li><code class="code docutils literal"><span class="pre">safemakedirs</span></code>: Create a directory without raising an exception if
+it exits.</li>
+<li><code class="code docutils literal"><span class="pre">create_logger</span></code>: Return a logger with a FileHandler at a given
+logging level.</li>
+</ul>
+</li>
+</ul>
 <p><code class="code docutils literal"><span class="pre">otwrapy</span></code> comes from the experience of wrapping a lot of
 different external codes at <a class="reference external" href="http://www.phimeca.com">Phimeca engineering</a>. We are a company specialized on
 uncertainty treatment and we assist our clients introducing the
@@ -69,31 +77,41 @@ probabilistic dimension in their so far deterministic studies.</p>
 <p class="first admonition-title">Warning</p>
 <p class="last">While fully usable, otwrapy is still pre-1.0 software and has <strong>no</strong>
 backwards compatibility guarantees until the 1.0 release occurs! Please
-make sure to be carefully <strong>anytime you upgrade</strong>!</p>
+make sure to be carefull <strong>anytime you upgrade</strong>!</p>
 </div>
-</div>
-<div class="section" id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>In a terminal, type in :</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>$ python setup.py install
-</pre></div>
-</div>
-<p>Test are available in the &#8216;tests&#8217; directory. They can be launched with
-the following command in a terminal in the otwrapy directory:</p>
-<div class="highlight-shell"><div class="highlight"><pre><span></span>$ py.test
-</pre></div>
-</div>
-</div>
-<div class="section" id="dependencies">
-<h1>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li>numpy</li>
-<li>openturns</li>
-<li>ipyparallel (optional)</li>
-<li>joblib (optional). scikit-learn comes with joblib installed (sklearn.externals.joblib)</li>
-<li>pytest (optional for testing)</li>
-<li>sphinx and numpydoc for building the doc</li>
+<div class="section" id="table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#how-to-use-the-module">How to use the module</a></li>
 </ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Documentation of the API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.Parallelizer.html">otwrapy.Parallelizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.TempWorkDir.html">otwrapy.TempWorkDir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.Debug.html">otwrapy.Debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.NumericalMathFunctionDecorator.html">otwrapy.NumericalMathFunctionDecorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.dump_array.html">otwrapy.dump_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.load_array.html">otwrapy.load_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.safemakedirs.html">otwrapy.safemakedirs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_generated/otwrapy.create_logger.html">otwrapy.create_logger</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 </div>
 
 
@@ -111,7 +129,7 @@ the following command in a terminal in the otwrapy directory:</p>
 
 
 
-<p class="blurb">Collection of tools that simplify the task of wrapping external codes in a Python environment. Proudly develloped at Phimeca engineering.</p>
+<p class="blurb">Collection of tools that simplify the task of wrapping external codes in a Python environment. Proudly develloped at <b><a href="http://www.phimeca.com">Phimeca</a></b></p>
 
 
 
@@ -124,11 +142,21 @@ the following command in a terminal in the otwrapy directory:</p>
 
 
 <h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Documentation of the API</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="getting_started.html" title="next chapter">Getting started</a></li>
   </ul></li>
 </ul>
 </div>

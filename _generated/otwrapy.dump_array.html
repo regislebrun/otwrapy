@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>otwrapy.dump_array &mdash; otwrapy  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/Icon.ico"/>
+    <link rel="top" title="otwrapy  documentation" href="../index.html" />
+    <link rel="up" title="Documentation of the API" href="../api.html" />
+    <link rel="next" title="otwrapy.load_array" href="otwrapy.load_array.html" />
+    <link rel="prev" title="otwrapy.NumericalMathFunctionDecorator" href="otwrapy.NumericalMathFunctionDecorator.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="otwrapy-dump-array">
+<h1>otwrapy.dump_array<a class="headerlink" href="#otwrapy-dump-array" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="otwrapy.dump_array">
+<code class="descname">dump_array</code><span class="sig-paren">(</span><em>array</em>, <em>filename</em>, <em>compress=False</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.dump_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump an array to a (possibly compressed) file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>array</strong> : array</p>
+<blockquote>
+<div><p>Array to be compressed. Typically a np.array or ot.NumericalSample.</p>
+</div></blockquote>
+<p><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Path where the file is dumped. If the extension is &#8216;.pklz&#8217;, it considers
+that the file has to be compressed with <em>gzip</em>.</p>
+</div></blockquote>
+<p><strong>compressed</strong> : bool</p>
+<blockquote class="last">
+<div><p>Indicates if the file has to be compressed with gzip or not.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/LogoPhiHaut.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Collection of tools that simplify the task of wrapping external codes in a Python environment. Proudly develloped at <b><a href="http://www.phimeca.com">Phimeca</a></b></p>
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=felipeam86&repo=otwrapy&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Documentation of the API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.Parallelizer.html">otwrapy.Parallelizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.TempWorkDir.html">otwrapy.TempWorkDir</a></li>
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.Debug.html">otwrapy.Debug</a></li>
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.NumericalMathFunctionDecorator.html">otwrapy.NumericalMathFunctionDecorator</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">otwrapy.dump_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.load_array.html">otwrapy.load_array</a></li>
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.safemakedirs.html">otwrapy.safemakedirs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="otwrapy.create_logger.html">otwrapy.create_logger</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../api.html">Documentation of the API</a><ul>
+      <li>Previous: <a href="otwrapy.NumericalMathFunctionDecorator.html" title="previous chapter">otwrapy.NumericalMathFunctionDecorator</a></li>
+      <li>Next: <a href="otwrapy.load_array.html" title="next chapter">otwrapy.load_array</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/_generated/otwrapy.dump_array.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/felipeam86/otwrapy" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-76867657-1']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    
+  </body>
+</html>

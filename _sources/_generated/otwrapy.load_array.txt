@@ -1,0 +1,6 @@
+otwrapy.load_array
+==================
+
+.. currentmodule:: otwrapy
+
+.. autofunction:: load_array

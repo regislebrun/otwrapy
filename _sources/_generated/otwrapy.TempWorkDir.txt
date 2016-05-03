@@ -1,0 +1,22 @@
+otwrapy.TempWorkDir
+===================
+
+.. currentmodule:: otwrapy
+
+.. autoclass:: TempWorkDir
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TempWorkDir.__init__
+   
+   
+
+   
+   
+   

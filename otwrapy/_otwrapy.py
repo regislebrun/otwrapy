@@ -81,14 +81,31 @@ def create_logger(logfile, loglevel=None):
 
 class Debug(object):
     """Decorator --> catch exceptions inside a function and log them.
+
     A decorator used to protect functions so that exceptions are logged to a
     file. It can either be instantiated with a Logger or with a filename for
-    which a logger with be created with a FileHandler.
+    which a logger will be created with a FileHandler. It comes specialy handy
+    when you launch your codes in a non interactive environement (e.g., HPC
+    cluster through submission scripts), given that Exceptions are captured and
+    logged to a file.
+
+    The great benefit of this implementation is that with a simple decorator
+    you can protect the methods of your Wrapper class with a try/except
+    structure. However, this might not be usefull for a deeper debugging where
+    you want to have acces to the locals() of the place where the Exception
+    jumped. If you bump into such a case, add a try/except structure that
+    catches the Exception on the specific place. It is adviced to use the
+    decorator once you have develloped the wrapper and that you are ready to
+    launch your uncertainty studies.
 
     Parameters
     ----------
     logger : logging.Logger or str
-        Either a Logger instance or a filename for the logger to be created
+        Either a Logger instance or a filename for the logger to be created.
+
+    loglevel : logging level
+        Threshold for the logger. Logging messages which are less severe than 
+        loglevel will be ignored. It defaults to logging.DEBUG.
     """
 
     def __init__(self, logger, loglevel=None):

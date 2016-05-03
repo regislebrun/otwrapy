@@ -22,7 +22,7 @@ __email__ = "aguirre@phimeca.fr"
 __all__ = ['load_array', 'dump_array', '_exec_sample_joblib',
            '_exec_sample_multiprocessing', '_exec_sample_ipyparallel',
            'NumericalMathFunctionDecorator', 'TempWorkDir', 'Parallelizer',
-           'create_logger', 'Debug']
+           'create_logger', 'Debug', 'safemakedirs']
 
 
 base_dir = os.path.dirname(__file__)
@@ -43,6 +43,22 @@ def dump_array(array, filename, compress=False):
     else:
         with open(filename, 'wb') as fh:
             pickle.dump(array, fh, protocol=2)
+
+def safemakedirs(folder):
+    """Make a directory without raising an error if it exists.
+
+    Parameters
+    ----------
+    folder : str
+        Path of the folder to be created.
+    """
+    try:
+        os.makedirs(folder)
+    except OSError, e:
+        # Check if it was not a "directory exist" error..
+        if e.errno != 17:
+            raise
+        pass
 
 def create_logger(logfile, loglevel=None):
     """Create a logger with a FileHandler at the given loglevel

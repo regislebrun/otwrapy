@@ -9,7 +9,7 @@ import os
 
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2016, Phimeca Engineering"
-__version__ = "0.3"
+__version__ = "0.4"
 __email__ = "aguirre@phimeca.fr"
 
 base_dir = os.path.dirname(__file__)

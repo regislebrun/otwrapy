@@ -76,11 +76,13 @@ html_theme_options = {
     'logo_name': 'otwrapy',
     'description': 'Collection of tools that simplify the task of wrapping ' + 
                    'external codes in a Python environment. ' +
-                   'Proudly develloped at Phimeca engineering.',
+                   'Proudly develloped at ' +
+                   '<b><a href="http://www.phimeca.com">Phimeca</a></b>',
     'github_user': 'felipeam86',
     'github_repo': 'otwrapy',
     'github_banner': True,
-    'show_related': True
+    'show_related': True,
+    'analytics_id': 'UA-76867657-1'
 }
 
 # The name of an image file (within the static path) to use as favicon of the

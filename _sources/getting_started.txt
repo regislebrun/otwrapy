@@ -42,5 +42,5 @@ In which case, :code:`model` will be your parallelized :py:class:`openturns.Nume
 `joblib <https://pythonhosted.org/joblib/>`_ as a backend and as many cpus as available in your
 machine (:code:`n_cpus=-1`). For further information, refer to the :doc:`api`.
 
-Or you can simply consider this as a cookbook and take what you consider useful.
-In which case, I suggest reading :doc:`examples`
+
+Or you can simply consider this as a cookbook and take what you consider useful. In which case, I suggest reading the  :doc:`examples` section

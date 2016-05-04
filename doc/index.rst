@@ -16,4 +16,9 @@ Table of contents
 .. toctree::
     :maxdepth: 3
 
+    examples.rst
+
+.. toctree::
+    :maxdepth: 3
+
     api.rst

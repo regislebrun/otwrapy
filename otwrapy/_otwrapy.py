@@ -91,7 +91,7 @@ def create_logger(logfile, loglevel=None):
         Filename for the logger FileHandler to be created.
 
     loglevel : logging level
-        Threshold for the logger. Logging messages which are less severe than 
+        Threshold for the logger. Logging messages which are less severe than
         loglevel will be ignored. It defaults to logging.DEBUG.
     """
     if loglevel is None:
@@ -144,6 +144,17 @@ class Debug(object):
     loglevel : logging level
         Threshold for the logger. Logging messages which are less severe than
         loglevel will be ignored. It defaults to logging.DEBUG.
+
+    Examples
+    --------
+    To catch exceptions raised inside a function and log them to a file :
+
+    >>> import otwrapy as otw
+    >>> @otw.Debug('func.log')
+    >>> def func(*args, **kwargs):
+    >>>     pass
+
+
     """
 
     def __init__(self, logger, loglevel=None):
@@ -174,6 +185,23 @@ class NumericalMathFunctionDecorator(object):
     ----------
     enableCache : bool (Optional)
         If True, enable cache of the returned ot.NumericalMathFunction
+
+    Examples
+    --------
+    In order to always get an ot.NumericalMathFunction when instantiating your
+    wrapper, decorate it as follows:
+
+    >>> import otwrapy as otw
+    >>> import openturns as ot
+    >>> @otw.NumericalMathFunctionDecorator(enableCache=True)
+    >>> class Wrapper(ot.OpenTURNSPythonFunction):
+    >>>     pass
+
+    Note that a great disadvantage of this decorator is that your wrapper cannot
+    be parallelized afterwards. Only use it if you don't plan to parallelize
+    your wrapper or if the wrapper itself is parallelized already. However, if
+    you plan to use :class:`Parallelizer`, there is no need to use this decorator !
+
 
     Notes
     -----
@@ -237,6 +265,38 @@ class TempWorkDir(object):
     cleanup : bool (optional)
         If True erase the directory and its children at the exit.
         Default = False
+
+
+    Examples
+    --------
+    In the following example, everything that is executed inside the :code:`with`
+    environement will happen at a temporary working directory created at
+    :file:`/tmp` with :file:`/run-` as a prefix. The created directory will be
+    erased upon the exit of the  :code:`with` environement and python will go
+    back to the preceeding working directory, even if an Exception is raised.
+
+    >>> import otwrapy as otw
+    >>> import os
+    >>> print "I'm on my project directory"
+    >>> print os.getcwd()
+    >>> with otw.TempWorkDir('/tmp', prefix='run-', cleanup=True):
+    >>>     #
+    >>>     # Do stuff
+    >>>     #
+    >>>     print "..."
+    >>>     print "Now I'm in a temporary directory"
+    >>>     print os.getcwd()
+    >>>     print "..."
+    >>> print "I'm back to my project directory :"
+    >>> print os.getcwd()
+    I'm on my project directory
+    /home/aguirre/otwrapy
+    ...
+    Now I'm in a temporary directory
+    /tmp/run-pZYpzQ
+    ...
+    I'm back to my project directory :
+    /home/aguirre/otwrapy
     """
     def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False):
         self.dirname = mkdtemp(dir=base_temp_work_dir, prefix=prefix)
@@ -355,6 +415,21 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     sleep : float (Optional)
         Intentional delay (in seconds) to demonstrate the effect of
         parallelizing.
+
+    Examples
+    --------
+    For example, in order to parallelize the beam wrapper :class:`examples.beam.Wrapper`
+    you simply instantiate your wrapper and parallelize it as follows:
+
+    >>> from otwrapy.examples.beam import Wrapper
+    >>> import otwrapy as otw
+    >>> model = otw.Parallelizer(Wrapper(), n_cpus=-1)
+
+    :code:`model` will distribute calls to Wrapper() using multiprocessing and
+    as many CPUs as you have.
+
+    Because Parallelize is decorated with :class:`NumericalMathFunctionDecorator`,
+    :code:`model` is already an :class:`ot.NumericalMathFunction`.
     """
     def __init__(self, wrapper, backend='multiprocessing', n_cpus=10):
 

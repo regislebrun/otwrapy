@@ -27,9 +27,6 @@ class Wrapper(ot.OpenTURNSPythonFunction):
     distributed across several nodes in a cluster.
     """
 
-    # Possible configurations
-    places = ['phimeca', 'poincare', 'tgcc']
-
     def __init__(self, tmpdir='/tmp', sleep=0.0):
         """
         Parameters
@@ -101,14 +98,8 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             ['@F','@E','@L','@I'],
             X)
 
-    def _call(self, X):
+    def _call(self):
         """Execute code on the shell
-
-        Parameters
-        ----------
-        X : float (something like ot.NumericalPoint or a numpy 1D array)
-            Input vector of size :math:`n` on which the model will be evaluated
-
         Returns
         -------
         runtime : float

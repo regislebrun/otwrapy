@@ -17,14 +17,36 @@ import otwrapy as otw
 
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2015, Phimeca Engineering"
-__version__ = "0.1.1"
+__version__ = "0.2"
 __email__ = "aguirre@phimeca.fr"
 __all__ = ['Wrapper']
 
 class Wrapper(ot.OpenTURNSPythonFunction):
-    """
-    This Wrapper is intended to be lightweight so that it can be easily
-    distributed across several nodes in a cluster.
+    """Wrapper of a C++ code that computes the deviation of a beam.
+
+    The C++ code computes the deviation with the given formula:
+
+    .. math::
+
+        y = \\frac{FL^{3}}{3EI}
+    with :
+
+    - :math:`F` : Load
+    - :math:`E` : Young modulus
+    - :math:`L` : Length
+    - :math:`I` : Inertia
+
+    The wrapped code is an executable that is run from the shell as follows :
+
+    .. code-block:: shell
+
+        $ beam -x beam.xml
+
+    where :file:`beam.xml` is the input file containing the four parameters
+    :math:`F, E, L, I`.
+
+    The output of the code is an xml output file :file:`_beam_outputs_.xml`
+    containing the deviation and its derivates.
     """
 
     def __init__(self, tmpdir='/tmp', sleep=0.0):
@@ -55,12 +77,30 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
     @otw.Debug('beam_wrapper.log')
     def _exec(self, X):
-        """Run the model in the shell.
+        """Run the model in the shell for a given point :math:`X`.
+
+        This is the default OpenTURNS method that executes the function on a
+        given point. It has to be overloaded so that it executes/wraps your
+        code. Semantically speaking, the function is divided on three parts :
+
+        - Create an input file with values of :math:`X` using :func:`~Wrapper._create_input_file`.
+
+        - Run the executable on the shell using :func:`~Wrapper._call`.
+
+        - Read the value of the output from the XML output file using :func:`~Wrapper._parse_output`.
+
+        The three steps are executed on a temporary working directory using the
+        context manager :class:`otwrapy.TempWorkDir`
 
         Parameters
         ----------
-        X : float (something like ot.NumericalPoint or a numpy 1D array)
+        X : 1D array (e.g. ot.NumericalPoint or a 1D np.array)
             Input vector of size :math:`n` on which the model will be evaluated
+
+        Returns
+        -------
+        Y : list
+            Output vector of the model. Univariate in this case.
         """
 
         # Create intentional delay
@@ -83,13 +123,13 @@ class Wrapper(ot.OpenTURNSPythonFunction):
     def _create_input_file(self, X):
         """Create the input file required by the code.
 
-        Replace the values of the vector X to their corresponding tokens on the
-        self.input_template and create the input file `beam.xml` on the current
-        working directory.
+        Replace the values of the vector :math:`X` to their corresponding tokens
+        on the :file:`beam_input_template.xml` and create the input file :file:`beam.xml`
+        on the current working directory.
 
         Parameters
         ----------
-        X : float (something like ot.NumericalPoint or a numpy 1D array)
+        X : 1D array (e.g. ot.NumericalPoint or a 1D np.array)
             Input vector of size :math:`n` on which the model will be evaluated
         """
         ot.coupling_tools.replace(
@@ -99,7 +139,8 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             X)
 
     def _call(self):
-        """Execute code on the shell
+        """Execute code on the shell and return the runtime
+
         Returns
         -------
         runtime : float
@@ -114,7 +155,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
 
 
     def _parse_output(self):
-        """Parse the output given by the code
+        """Parse the XML output given by the code and get the value of deviation
 
         Returns
         -------

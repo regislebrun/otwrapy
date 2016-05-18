@@ -23,6 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/Icon.ico"/>
     <link rel="top" title="otwrapy  documentation" href="../index.html" />
     <link rel="up" title="Documentation of the API" href="../api.html" />
@@ -77,6 +78,14 @@ loglevel will be ignored. It defaults to logging.DEBUG.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>To catch exceptions raised inside a function and log them to a file :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">otwrapy</span> <span class="k">as</span> <span class="nn">otw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@otw</span><span class="o">.</span><span class="n">Debug</span><span class="p">(</span><span class="s1">&#39;func.log&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">pass</span>
+</pre></div>
+</div>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>

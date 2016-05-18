@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Beam wrapper &mdash; otwrapy  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="shortcut icon" href="_static/Icon.ico"/>
+    <link rel="top" title="otwrapy  documentation" href="index.html" />
+    <link rel="up" title="Examples" href="examples.html" />
+    <link rel="next" title="Documentation of the API" href="api.html" />
+    <link rel="prev" title="Examples" href="examples.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="beam-wrapper">
+<h1>Beam wrapper<a class="headerlink" href="#beam-wrapper" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In construction...</p>
+</div>
+<dl class="class">
+<dt id="otwrapy.examples.beam.Wrapper">
+<em class="property">class </em><code class="descname">Wrapper</code><span class="sig-paren">(</span><em>tmpdir='/tmp'</em>, <em>sleep=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.examples.beam.Wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper of a C++ code that computes the deviation of a beam.</p>
+<p>The C++ code computes the deviation with the given formula:</p>
+<div class="math">
+\[y = \frac{FL^{3}}{3EI}\]</div>
+<p>with :</p>
+<ul class="simple">
+<li><span class="math">\(F\)</span> : Load</li>
+<li><span class="math">\(E\)</span> : Young modulus</li>
+<li><span class="math">\(L\)</span> : Length</li>
+<li><span class="math">\(I\)</span> : Inertia</li>
+</ul>
+<p>The wrapped code is an executable that is run from the shell as follows :</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>$ beam -x beam.xml
+</pre></div>
+</div>
+<p>where <code class="file docutils literal"><span class="pre">beam.xml</span></code> is the input file containing the four parameters
+<span class="math">\(F, E, L, I\)</span>.</p>
+<p>The output of the code is an xml output file <code class="file docutils literal"><span class="pre">_beam_outputs_.xml</span></code>
+containing the deviation and its derivates.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">__call__</span></code>(X)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">getInputDescription</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">getInputDimension</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">getOutputDescription</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">getOutputDimension</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">setInputDescription</span></code>(descIn)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setOutputDescription</span></code>(descOut)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="otwrapy.examples.beam.Wrapper.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>tmpdir='/tmp'</em>, <em>sleep=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.examples.beam.Wrapper.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tmpdir</strong> : string</p>
+<blockquote>
+<div><p>The root directory on which temporary working directories will be
+created for each independent simulation.</p>
+</div></blockquote>
+<p><strong>sleep</strong> : float (Optional)</p>
+<blockquote class="last">
+<div><p>Intentional delay (in seconds) to demonstrate the effect of
+parallelizing.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="otwrapy.examples.beam.Wrapper._exec">
+<code class="descname">_exec</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.examples.beam.Wrapper._exec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the model in the shell for a given point <span class="math">\(X\)</span>.</p>
+<p>This is the default OpenTURNS method that executes the function on a
+given point. It has to be overloaded so that it executes/wraps your
+code. Semantically speaking, the function is divided on three parts :</p>
+<ul class="simple">
+<li>Create an input file with values of <span class="math">\(X\)</span> using <a class="reference internal" href="#otwrapy.examples.beam.Wrapper._create_input_file" title="otwrapy.examples.beam.Wrapper._create_input_file"><code class="xref py py-func docutils literal"><span class="pre">_create_input_file()</span></code></a>.</li>
+<li>Run the executable on the shell using <a class="reference internal" href="#otwrapy.examples.beam.Wrapper._call" title="otwrapy.examples.beam.Wrapper._call"><code class="xref py py-func docutils literal"><span class="pre">_call()</span></code></a>.</li>
+<li>Read the value of the output from the XML output file using <a class="reference internal" href="#otwrapy.examples.beam.Wrapper._parse_output" title="otwrapy.examples.beam.Wrapper._parse_output"><code class="xref py py-func docutils literal"><span class="pre">_parse_output()</span></code></a>.</li>
+</ul>
+<p>The three steps are executed on a temporary working directory using the
+context manager <a class="reference internal" href="_generated/otwrapy.TempWorkDir.html#otwrapy.TempWorkDir" title="otwrapy.TempWorkDir"><code class="xref py py-class docutils literal"><span class="pre">otwrapy.TempWorkDir</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> : 1D array (e.g. ot.NumericalPoint or a 1D np.array)</p>
+<blockquote>
+<div><p>Input vector of size <span class="math">\(n\)</span> on which the model will be evaluated</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Y</strong> : list</p>
+<blockquote class="last">
+<div><p>Output vector of the model. Univariate in this case.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="otwrapy.examples.beam.Wrapper._create_input_file">
+<code class="descname">_create_input_file</code><span class="sig-paren">(</span><em>X</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.examples.beam.Wrapper._create_input_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the input file required by the code.</p>
+<p>Replace the values of the vector <span class="math">\(X\)</span> to their corresponding tokens
+on the <code class="file docutils literal"><span class="pre">beam_input_template.xml</span></code> and create the input file <code class="file docutils literal"><span class="pre">beam.xml</span></code>
+on the current working directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>X</strong> : 1D array (e.g. ot.NumericalPoint or a 1D np.array)</p>
+<blockquote class="last">
+<div><p>Input vector of size <span class="math">\(n\)</span> on which the model will be evaluated</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="otwrapy.examples.beam.Wrapper._call">
+<code class="descname">_call</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.examples.beam.Wrapper._call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute code on the shell and return the runtime</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>runtime</strong> : float</p>
+<blockquote class="last">
+<div><p>Total runtime (wall time and not cpu time)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="otwrapy.examples.beam.Wrapper._parse_output">
+<code class="descname">_parse_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.examples.beam.Wrapper._parse_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the XML output given by the code and get the value of deviation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>Y</strong> : list</p>
+<blockquote class="last">
+<div><p>Output vector of the model. Univariate in this case.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/LogoPhiHaut.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">Collection of tools that simplify the task of wrapping external codes in a Python environment. Proudly develloped at <b><a href="http://www.phimeca.com">Phimeca</a></b></p>
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=felipeam86&repo=otwrapy&type=watch&count=true&size=large"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Beam wrapper</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Documentation of the API</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="examples.html">Examples</a><ul>
+      <li>Previous: <a href="examples.html" title="previous chapter">Examples</a></li>
+      <li>Next: <a href="api.html" title="next chapter">Documentation of the API</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/beam_wrapper.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/felipeam86/otwrapy" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-76867657-1']);
+      _gaq.push(['_setDomainName', 'none']);
+      _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+    
+  </body>
+</html>

@@ -23,6 +23,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="../_static/Icon.ico"/>
     <link rel="top" title="otwrapy  documentation" href="../index.html" />
     <link rel="up" title="Documentation of the API" href="../api.html" />
@@ -69,6 +70,20 @@ so that they can be easily distributed with <cite>multiprocessing</cite></p>
 <a class="reference external" href="http://www.artima.com/weblogs/viewpost.jsp?thread=240808">http://www.artima.com/weblogs/viewpost.jsp?thread=240808</a>
 <a class="reference external" href="http://stackoverflow.com/questions/30714485/why-does-a-decorated-class-looses-its-docstrings">http://stackoverflow.com/questions/30714485/why-does-a-decorated-class-looses-its-docstrings</a>
 <a class="reference external" href="http://stackoverflow.com/questions/30711730/decorated-class-looses-acces-to-its-attributes">http://stackoverflow.com/questions/30711730/decorated-class-looses-acces-to-its-attributes</a></p>
+<p class="rubric">Examples</p>
+<p>In order to always get an ot.NumericalMathFunction when instantiating your
+wrapper, decorate it as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">otwrapy</span> <span class="k">as</span> <span class="nn">otw</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">openturns</span> <span class="k">as</span> <span class="nn">ot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@otw</span><span class="o">.</span><span class="n">NumericalMathFunctionDecorator</span><span class="p">(</span><span class="n">enableCache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Wrapper</span><span class="p">(</span><span class="n">ot</span><span class="o">.</span><span class="n">OpenTURNSPythonFunction</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Note that a great disadvantage of this decorator is that your wrapper cannot
+be parallelized afterwards. Only use it if you don&#8217;t plan to parallelize
+your wrapper or if the wrapper itself is parallelized already. However, if
+you plan to use <a class="reference internal" href="otwrapy.Parallelizer.html#otwrapy.Parallelizer" title="otwrapy.Parallelizer"><code class="xref py py-class docutils literal"><span class="pre">Parallelizer</span></code></a>, there is no need to use this decorator !</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>

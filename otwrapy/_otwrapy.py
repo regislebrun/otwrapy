@@ -76,7 +76,7 @@ def safemakedirs(folder):
     """
     try:
         os.makedirs(folder)
-    except OSError, e:
+    except OSError as e:
         # Check if it was not a "directory exist" error..
         if e.errno != 17:
             raise
@@ -170,7 +170,7 @@ class Debug(object):
         def func_debugged(*args, **kwargs):
             try:
                 return func(*args, **kwargs)
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e, exc_info=True)
                 raise e
 

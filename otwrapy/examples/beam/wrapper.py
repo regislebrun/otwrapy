@@ -214,20 +214,20 @@ if __name__ == '__main__':
     model = otw.Parallelizer(Wrapper(tmpdir=args.tmp, sleep=1),
         backend=args.backend, n_cpus=args.n_cpus)
 
-    print "The wrapper has been instantiated as 'model'."
+    print("The wrapper has been instantiated as 'model'.")
 
     if args.MonteCarlo is not None:
         from _probability_model import X_distribution
         ot.RandomGenerator.SetSeed(args.seed)
         N = int(args.MonteCarlo[0])
         X = X_distribution.getSample(N)
-        print "Generated a MonteCarlo DOE of size {}".format(N)
+        print("Generated a MonteCarlo DOE of size {}".format(N))
 
     elif args.X is not None:
         if isinstance(args.X[0], str) and os.path.isfile(args.X[0]):
             X = otw.load_array(args.X[0])
-            print "Loaded a DOE of size {} from file: '{}'".format(X.getSize(),
-                args.X[0])
+            print("Loaded a DOE of size {} from file: '{}'".format(X.getSize(),
+                args.X[0]))
         else:
             X = ot.NumericalPoint([float(x) for x in args.X])
 
@@ -237,10 +237,10 @@ if __name__ == '__main__':
         # Dump the results if asked
         if args.dump:
             otw.dump_array(Y, 'OutputSample.pkl')
-            print "The output has been saved to 'OutputSample.pkl'"
+            print("The output has been saved to 'OutputSample.pkl'")
         else:
-            print "Finished evaluationg the model. Take a look at 'Y' variable."
+            print("Finished evaluationg the model. Take a look at 'Y' variable.")
     elif (args.MonteCarlo is not None) or (args.X is not None):
-        print "The desired input is ready to be run using --> 'Y = model(X)'"
+        print("The desired input is ready to be run using --> 'Y = model(X)'")
 
 

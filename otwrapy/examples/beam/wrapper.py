@@ -113,7 +113,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             self._create_input_file(X)
 
             # Execute code
-            runtime = self._call(X)
+            runtime = self._call()
 
             # Retrieve output (see also ot.coupling_tools.get_value)
             Y = self._parse_output()

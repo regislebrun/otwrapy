@@ -392,7 +392,9 @@ def _exec_sample_ipyparallel(func, n, p):
     rc = ipp.Client()
 
     return ot.PythonFunction(func_sample=lambda X:
-                rc[:].map_sync(func, X), n=4, p=1)
+                rc[:].map_sync(func, X),
+                n=func.getInputDimension(),
+                p=func.getOutputDimension())
 
 @NumericalMathFunctionDecorator(enableCache=True)
 class Parallelizer(ot.OpenTURNSPythonFunction):

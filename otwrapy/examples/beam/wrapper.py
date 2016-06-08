@@ -62,7 +62,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
             parallelizing.
         """
 
-        self.base_dir = os.path.dirname(__file__)
+        self.base_dir = os.path.abspath(os.path.dirname(__file__))
         self.temp_work_dir = tmpdir
         self.input_template = os.path.join(self.base_dir,
             'beam_input_template.xml')

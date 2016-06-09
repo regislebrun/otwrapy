@@ -266,6 +266,8 @@ class TempWorkDir(object):
         If True erase the directory and its children at the exit.
         Default = False
 
+    transer : list (optional)
+        List of files to transfer to the temporary working directory
 
     Examples
     --------
@@ -298,12 +300,17 @@ class TempWorkDir(object):
     I'm back to my project directory :
     /home/aguirre/otwrapy
     """
-    def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False):
+    def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False,
+        transfer=None):
         self.dirname = mkdtemp(dir=base_temp_work_dir, prefix=prefix)
         self.cleanup = cleanup
+        self.transfer = transfer
     def __enter__(self):
         self.curdir = os.getcwd()
         os.chdir(self.dirname)
+        if self.transfer is not None:
+            for file in self.transfer:
+                shutil.copy(file, self.dirname)
     def __exit__(self, type, value, traceback):
         os.chdir(self.curdir)
         if self.cleanup:

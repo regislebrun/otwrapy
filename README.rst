@@ -16,8 +16,8 @@ audience. Documentation is available
   wrappers:
 
   - :code:`TempWorkDir`: Context manager that gracefully creates a temporary
-    working directory. It is prone to errors and has the option to cleanup at
-    the exit.
+    working directory. It handles errors and has the option to cleanup upon
+    exit.
   - :code:`Debug`: Decorator that protects the decorated function into a
     try/except structure so that errors are logged. It is specially usefull
     when you launch your code in a non interactive environement.

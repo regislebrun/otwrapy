@@ -15,6 +15,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.intersphinx',
     'sphinx.ext.autosummary',
+    'sphinx.ext.mathjax',
     'numpydoc',
 ]
 

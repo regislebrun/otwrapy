@@ -33,5 +33,6 @@ setup(
     tests_require=['pytest'],
     include_package_data = True,
     package_data = {'otwrapy': ['examples/beam/*']},
+    scripts=['otwrapy/examples/beam/beam_wrapper'],
     zip_safe=False
 )

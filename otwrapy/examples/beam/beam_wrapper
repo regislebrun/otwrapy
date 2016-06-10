@@ -39,6 +39,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     import otwrapy as otw
+    import openturns as ot
     from otwrapy.examples.beam import X_distribution, Wrapper
 
     model = otw.Parallelizer(Wrapper(tmpdir=args.tmp, sleep=1),

@@ -45,7 +45,7 @@
 <h1>otwrapy.TempWorkDir<a class="headerlink" href="#otwrapy-tempworkdir" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="otwrapy.TempWorkDir">
-<em class="property">class </em><code class="descname">TempWorkDir</code><span class="sig-paren">(</span><em>base_temp_work_dir='/tmp'</em>, <em>prefix='run-'</em>, <em>cleanup=False</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.TempWorkDir" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">TempWorkDir</code><span class="sig-paren">(</span><em>base_temp_work_dir='/tmp'</em>, <em>prefix='run-'</em>, <em>cleanup=False</em>, <em>transfer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.TempWorkDir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement a context manager that creates a temporary working directory.</p>
 <p>Create a temporary working directory on <cite>base_temp_work_dir</cite> preceeded by
 <cite>prefix</cite> and clean up at the exit if neccesary.
@@ -65,9 +65,13 @@ Default = &#8216;/tmp&#8217;</p>
 Default = &#8216;run-&#8216;</p>
 </div></blockquote>
 <p><strong>cleanup</strong> : bool (optional)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>If True erase the directory and its children at the exit.
 Default = False</p>
+</div></blockquote>
+<p><strong>transer</strong> : list (optional)</p>
+<blockquote class="last">
+<div><p>List of files to transfer to the temporary working directory</p>
 </div></blockquote>
 </td>
 </tr>
@@ -105,7 +109,7 @@ back to the preceeding working directory, even if an Exception is raised.</p>
 </div>
 <dl class="method">
 <dt id="otwrapy.TempWorkDir.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>base_temp_work_dir='/tmp'</em>, <em>prefix='run-'</em>, <em>cleanup=False</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.TempWorkDir.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>base_temp_work_dir='/tmp'</em>, <em>prefix='run-'</em>, <em>cleanup=False</em>, <em>transfer=None</em><span class="sig-paren">)</span><a class="headerlink" href="#otwrapy.TempWorkDir.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -115,7 +119,7 @@ back to the preceeding working directory, even if an Exception is raised.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#otwrapy.TempWorkDir.__init__" title="otwrapy.TempWorkDir.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([base_temp_work_dir,&nbsp;prefix,&nbsp;cleanup])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#otwrapy.TempWorkDir.__init__" title="otwrapy.TempWorkDir.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([base_temp_work_dir,&nbsp;prefix,&nbsp;...])</td>
 <td></td>
 </tr>
 </tbody>

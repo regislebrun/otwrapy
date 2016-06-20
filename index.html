@@ -56,8 +56,8 @@ into  a parallel wrapper using either
 <li>A set of usefull tools that simply recurrent tasks when constructing code
 wrappers:<ul>
 <li><code class="code docutils literal"><span class="pre">TempWorkDir</span></code>: Context manager that gracefully creates a temporary
-working directory. It is prone to errors and has the option to cleanup at
-the exit.</li>
+working directory. It handles errors and has the option to cleanup upon
+exit.</li>
 <li><code class="code docutils literal"><span class="pre">Debug</span></code>: Decorator that protects the decorated function into a
 try/except structure so that errors are logged. It is specially usefull
 when you launch your code in a non interactive environement.</li>

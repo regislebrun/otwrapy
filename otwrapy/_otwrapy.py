@@ -17,7 +17,7 @@ import numpy as np
 
 __author__ = "Felipe Aguirre Martinez"
 __copyright__ = "Copyright 2016, Phimeca Engineering"
-__version__ = "0.5"
+__version__ = "0.6"
 __email__ = "aguirre@phimeca.fr"
 __all__ = ['load_array', 'dump_array', '_exec_sample_joblib',
            '_exec_sample_multiprocessing', '_exec_sample_ipyparallel',
@@ -74,13 +74,8 @@ def safemakedirs(folder):
     folder : str
         Path of the folder to be created.
     """
-    try:
+    if not os.path.exists(folder):
         os.makedirs(folder)
-    except OSError as e:
-        # Check if it was not a "directory exist" error..
-        if e.errno != 17:
-            raise
-        pass
 
 def create_logger(logfile, loglevel=None):
     """Create a logger with a FileHandler at the given loglevel
@@ -97,7 +92,7 @@ def create_logger(logfile, loglevel=None):
     if loglevel is None:
         loglevel = logging.DEBUG
 
-    logger = logging.getLogger("vgp")
+    logger = logging.getLogger()
     logger.setLevel(loglevel)
 
     # ----------------------------------------------------------
@@ -255,8 +250,9 @@ class TempWorkDir(object):
     Parameters
     ----------
     base_temp_work_dir : str (optional)
-        Root path where the temporary working directory will be created.
-        Default = '/tmp'
+        Root path where the temporary working directory will be created. If None,
+        it will default to the platform dependant temporary working directory
+        Default = None
 
     prefix : str (optional)
         String that preceeds the directory name.
@@ -300,7 +296,7 @@ class TempWorkDir(object):
     I'm back to my project directory :
     /home/aguirre/otwrapy
     """
-    def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False,
+    def __init__(self, base_temp_work_dir=None, prefix='run-', cleanup=False,
         transfer=None):
         self.dirname = mkdtemp(dir=base_temp_work_dir, prefix=prefix)
         self.cleanup = cleanup
@@ -440,7 +436,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     Because Parallelize is decorated with :class:`NumericalMathFunctionDecorator`,
     :code:`model` is already an :class:`ot.NumericalMathFunction`.
     """
-    def __init__(self, wrapper, backend='multiprocessing', n_cpus=10):
+    def __init__(self, wrapper, backend='multiprocessing', n_cpus=-1):
 
         # -1 cpus means all available cpus
         if n_cpus == -1:

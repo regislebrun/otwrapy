@@ -92,7 +92,7 @@ def create_logger(logfile, loglevel=None):
     if loglevel is None:
         loglevel = logging.DEBUG
 
-    logger = logging.getLogger("vgp")
+    logger = logging.getLogger()
     logger.setLevel(loglevel)
 
     # ----------------------------------------------------------

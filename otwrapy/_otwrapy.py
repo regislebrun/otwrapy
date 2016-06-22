@@ -250,8 +250,9 @@ class TempWorkDir(object):
     Parameters
     ----------
     base_temp_work_dir : str (optional)
-        Root path where the temporary working directory will be created.
-        Default = '/tmp'
+        Root path where the temporary working directory will be created. If None,
+        it will default to the platform dependant temporary working directory
+        Default = None
 
     prefix : str (optional)
         String that preceeds the directory name.
@@ -295,7 +296,7 @@ class TempWorkDir(object):
     I'm back to my project directory :
     /home/aguirre/otwrapy
     """
-    def __init__(self, base_temp_work_dir='/tmp', prefix='run-', cleanup=False,
+    def __init__(self, base_temp_work_dir=None, prefix='run-', cleanup=False,
         transfer=None):
         self.dirname = mkdtemp(dir=base_temp_work_dir, prefix=prefix)
         self.cleanup = cleanup

@@ -77,7 +77,7 @@ html_theme_options = {
     'logo_name': 'otwrapy',
     'description': 'Collection of tools that simplify the task of wrapping ' + 
                    'external codes in a Python environment. ' +
-                   'Proudly develloped at ' +
+                   'Proudly developed at ' +
                    '<b><a href="http://www.phimeca.com">Phimeca</a></b>',
     'github_user': 'felipeam86',
     'github_repo': 'otwrapy',

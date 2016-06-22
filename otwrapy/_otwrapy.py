@@ -74,13 +74,8 @@ def safemakedirs(folder):
     folder : str
         Path of the folder to be created.
     """
-    try:
+    if not os.path.exists(folder):
         os.makedirs(folder)
-    except OSError as e:
-        # Check if it was not a "directory exist" error..
-        if e.errno != 17:
-            raise
-        pass
 
 def create_logger(logfile, loglevel=None):
     """Create a logger with a FileHandler at the given loglevel

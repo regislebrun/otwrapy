@@ -436,7 +436,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     Because Parallelize is decorated with :class:`NumericalMathFunctionDecorator`,
     :code:`model` is already an :class:`ot.NumericalMathFunction`.
     """
-    def __init__(self, wrapper, backend='multiprocessing', n_cpus=10):
+    def __init__(self, wrapper, backend='multiprocessing', n_cpus=-1):
 
         # -1 cpus means all available cpus
         if n_cpus == -1:

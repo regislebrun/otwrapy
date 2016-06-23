@@ -403,8 +403,8 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     Parameters
     ----------
 
-    where : string (Optional)
-        Setup configuration according to where you run it.
+    wrapper : ot.NumericalMathFunction or instance of ot.OpenTURNSPythonFunction
+        openturns wrapper to be distributed
 
     backend : string (Optional)
         Whether to parallelize using 'ipyparallel', 'joblib' or
@@ -413,10 +413,6 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     n_cpus : int (Optional)
         Number of CPUs on which the simulations will be distributed. Needed Only
         if using 'joblib' or 'multiprocessing' as backend.
-
-    sleep : float (Optional)
-        Intentional delay (in seconds) to demonstrate the effect of
-        parallelizing.
 
     Examples
     --------

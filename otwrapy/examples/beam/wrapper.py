@@ -49,7 +49,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
     containing the deviation and its derivates.
     """
 
-    def __init__(self, tmpdir='/tmp', sleep=0.0):
+    def __init__(self, tmpdir=None, sleep=0.0):
         """
         Parameters
         ----------
@@ -182,7 +182,7 @@ if __name__ == '__main__':
         description="Python wrapper example used for the PRACE training on HPC and uncertainty.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('-tmp', default='/tmp', type=str,
+    parser.add_argument('-tmp', default=None, type=str,
         help='Root directory on which temporary working directories will be' +
              'created for each independent simulation.')
 

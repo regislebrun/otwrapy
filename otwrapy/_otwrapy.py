@@ -365,9 +365,6 @@ def _exec_sample_multiprocessing(func, n_cpus):
         p = Pool(processes=n_cpus)
         rs = p.map_async(func, X)
         p.close()
-        while not rs.ready():
-            time.sleep(0.1)
-
         Y = np.vstack(rs.get())
         return ot.NumericalSample(Y)
     return _exec_sample

@@ -491,7 +491,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
                 except ImportError:
                     joblib_backend = False
                     import logging
-                    logging.warn('ipyparallel package missing.')
+                    logging.warn('joblib package missing.')
 
             if joblib_backend:
                 self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus)

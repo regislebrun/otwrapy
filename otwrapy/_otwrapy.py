@@ -313,7 +313,7 @@ class TempWorkDir(object):
             shutil.rmtree(self.dirname)
 
 
-def _exec_sample_joblib(func, n_cpus):
+def _exec_sample_joblib(func, n_cpus, verbosity):
     """Return a function that executes a sample in parallel using joblib
 
     Parameters
@@ -335,7 +335,7 @@ def _exec_sample_joblib(func, n_cpus):
     except ImportError:
         from sklearn.externals.joblib import Parallel, delayed
     def _exec_sample(X):
-        Y = Parallel(n_jobs=n_cpus, verbose=10)(delayed(func)(x) for x in X)
+        Y = Parallel(n_jobs=n_cpus, verbose=verbosity)(delayed(func)(x) for x in X)
         return ot.NumericalSample(Y)
 
     return _exec_sample
@@ -413,6 +413,9 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         Number of CPUs on which the simulations will be distributed. Needed Only
         if using 'joblib' or 'multiprocessing' as backend.
 
+    verbosity : int (Optional)
+        verbose parameter when using joblib. Default is 10.
+
     Examples
     --------
     For example, in order to parallelize the beam wrapper :class:`examples.beam.Wrapper`
@@ -428,7 +431,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
     Because Parallelize is decorated with :class:`NumericalMathFunctionDecorator`,
     :code:`model` is already an :class:`ot.NumericalMathFunction`.
     """
-    def __init__(self, wrapper, backend='multiprocessing', n_cpus=-1):
+    def __init__(self, wrapper, backend='multiprocessing', n_cpus=-1, verbosity=10):
 
         # -1 cpus means all available cpus
         if n_cpus == -1:
@@ -437,6 +440,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
 
         self.n_cpus = n_cpus
         self.wrapper = wrapper
+        self.verbosity = verbosity
         # This configures how to run single point simulations on the model :
         self._exec = self.wrapper
 
@@ -494,7 +498,8 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
                     logging.warn('joblib package missing.')
 
             if joblib_backend:
-                self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus)
+                self._exec_sample = _exec_sample_joblib(self.wrapper, self.n_cpus,
+                                                        self.verbosity)
             else:
                 logging.warn('Using multiprocessing backend instead')
                 self._exec_sample = _exec_sample_multiprocessing(self.wrapper,

@@ -414,7 +414,7 @@ class Parallelizer(ot.OpenTURNSPythonFunction):
         if using 'joblib' or 'multiprocessing' as backend.
 
     verbosity : int (Optional)
-        verbose parameter when using joblib. Default is 10.
+        verbose parameter when using 'joblib'. Default is 10.
 
     Examples
     --------

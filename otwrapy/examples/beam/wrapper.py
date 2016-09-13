@@ -75,7 +75,7 @@ class Wrapper(ot.OpenTURNSPythonFunction):
         self.setInputDescription(['Load', 'Young modulus', 'Length', 'Inertia'])
         self.setOutputDescription(['deviation'])
 
-    @otw.Debug('wrapper.log')
+    #@otw.Debug('wrapper.log')
     def _exec(self, X):
         """Run the model in the shell for a given point :math:`X`.
 
